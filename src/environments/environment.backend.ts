@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  screen: 'aisl-mockup'
+  screen: 'aisl-backend'
 };

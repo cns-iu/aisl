@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomeComponent } from './home/home.component';
+import { GeomapComponent } from './geomap/geomap.component';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   exports: [
-    HomeComponent
+    GeomapComponent
   ],
-  declarations: [HomeComponent]
+  declarations: [GeomapComponent]
 })
-export class AislBackendModule { }
+export class MavModule { }
