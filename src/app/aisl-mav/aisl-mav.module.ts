@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GeomapComponent } from './geomap/geomap.component';
 import {MavModule} from '../mav';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   imports: [
@@ -9,8 +10,9 @@ import {MavModule} from '../mav';
     MavModule
   ],
   exports : [
-    GeomapComponent
+    GeomapComponent,
+    HomeComponent
   ],
-  declarations: [GeomapComponent]
+  declarations: [GeomapComponent, HomeComponent]
 })
 export class AislMavModule { }

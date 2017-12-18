@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {AislMavModule} from './aisl-mav';
 
+import { CoreModule } from './core';
+import {AislMavModule} from './aisl-mav';
 import { AppComponent } from './app.component';
 
 
@@ -11,6 +12,7 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
+    CoreModule,
     AislMavModule
   ],
   providers: [],
