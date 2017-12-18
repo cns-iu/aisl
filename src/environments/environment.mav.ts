@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  screen: null
+  screen: 'aisl-mav'
 };
