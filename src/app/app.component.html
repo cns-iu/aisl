@@ -1,17 +1,9 @@
-<<<<<<< HEAD
-<aisl-sidebar>
-</aisl-sidebar>
 
-<aisl-main-content>
-</aisl-main-content>
-=======
 <aisl-backend-home *ngIf="activeScreen == 'aisl-backend'"></aisl-backend-home>
 <aisl-endline-home *ngIf="activeScreen == 'aisl-endline'"></aisl-endline-home>
 <aisl-mav-home *ngIf="activeScreen == 'aisl-mav'"></aisl-mav-home>
+<aisl-mockup-home *ngIf="activeScreen == 'aisl-mockup'"></aisl-mockup-home>
 
-<div *ngIf="activeScreen == 'aisl-mockup'">
-  Replace div with your {{ activeScreen }} component
-</div>
 
 <!--The content below is only a placeholder and can be replaced.-->
 <div *ngIf="!activeScreen">
@@ -34,4 +26,3 @@
     </li>
   </ul>
 </div>
->>>>>>> master
