@@ -1,11 +1,9 @@
-<div *ngIf="activeScreen == 'aisl-endline'">
-  Replace div with your {{ activeScreen }} component
-</div>
+<aisl-backend-home *ngIf="activeScreen == 'aisl-backend'"></aisl-backend-home>
+<aisl-endline-home *ngIf="activeScreen == 'aisl-endline'"></aisl-endline-home>
 <div *ngIf="activeScreen == 'aisl-mav'">
   <aisl-mav-home>
   </aisl-mav-home>
-  <mav-geomap>
-  </mav-geomap>
+
 
   Replace div with your {{ activeScreen }} component
 </div>

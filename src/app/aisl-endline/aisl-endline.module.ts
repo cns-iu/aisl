@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TimeDisplayComponent } from './time-display/time-display.component';
 import { HomeComponent } from './home/home.component';
 
 @NgModule({
@@ -7,8 +8,8 @@ import { HomeComponent } from './home/home.component';
     CommonModule
   ],
   exports: [
-    HomeComponent
+    TimeDisplayComponent, HomeComponent
   ],
-  declarations: [HomeComponent]
+  declarations: [TimeDisplayComponent, HomeComponent]
 })
-export class AislBackendModule { }
+export class AislEndlineModule { }
