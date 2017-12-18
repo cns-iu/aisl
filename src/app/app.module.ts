@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { CoreModule } from './core';
+import { AislBackendModule } from './aisl-backend';
 import { AislEndlineModule } from './aisl-endline';
 import { AppComponent } from './app.component';
 
@@ -13,6 +14,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     CoreModule,
+    AislBackendModule,
     AislEndlineModule
   ],
   providers: [],
