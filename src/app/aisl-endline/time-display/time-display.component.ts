@@ -9,8 +9,8 @@ import {} from 'moment-duration-format';
   styleUrls: ['./time-display.component.sass']
 })
 export class TimeDisplayComponent implements OnInit {
-  @Input() timeFormat: string = 'mm:ss:SS';
   @Input() time: Duration = duration(0);
+  @Input() timeFormat: string = 'ss:SS';
 
   formattedTime: string;
 
@@ -20,7 +20,7 @@ export class TimeDisplayComponent implements OnInit {
   }
 
   ngOnChange(changes: SimpleChanges) {
-    this.formattedTime = this.time.format(this.timeFormat);
+    this.formattedTime = this.time.format(this.timeFormat, {trim: false});
   }
 
 }
