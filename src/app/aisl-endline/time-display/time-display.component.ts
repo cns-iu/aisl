@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChange, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 
 import {Duration, duration} from 'moment';
 import {} from 'moment-duration-format';
