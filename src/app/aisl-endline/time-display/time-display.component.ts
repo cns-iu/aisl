@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit, OnChange, SimpleChanges } from '@angular/core';
 
-import {Duration} from 'moment';
+import {Duration, duration} from 'moment';
 import {} from 'moment-duration-format';
 
 @Component({
@@ -10,13 +10,16 @@ import {} from 'moment-duration-format';
 })
 export class TimeDisplayComponent implements OnInit {
   @Input() timeFormat: string = 'mm:ss:SS';
-  @Input() time: Duration;
+  @Input() time: Duration = duration(0);
 
   formattedTime: string;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngOnChange(changes: SimpleChanges) {
     this.formattedTime = this.time.format(this.timeFormat);
   }
 
