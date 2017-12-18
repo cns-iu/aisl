@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { CoreModule } from './core';
-
+import { AislEndlineModule } from './aisl-endline';
 import { AppComponent } from './app.component';
 
 
@@ -12,7 +12,8 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    CoreModule
+    CoreModule,
+    AislEndlineModule
   ],
   providers: [],
   bootstrap: [AppComponent]
