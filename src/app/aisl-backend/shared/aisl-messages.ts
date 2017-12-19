@@ -2,13 +2,13 @@ import { Message } from './message';
 import { Avatar } from './avatar';
 import { Persona } from './persona';
 
-export interface RunSelectedMessage extends Message {
-  type: 'run-selected';
+export class RunSelectedMessage extends Message {
+  type: string = 'run-selected';
   avatar: Avatar;
 }
 
-export interface RaceInitiatedMessage extends Message {
-  type: 'race-initiated';
+export class RaceInitiatedMessage extends Message {
+  type: string = 'race-initiated';
   avatar: Avatar;
 }
 
@@ -20,14 +20,8 @@ export interface RaceResult {
   timeMillis: number;
 }
 
-export interface RaceCompletedMessage extends Message {
-  type: 'race-completed';
+export class RaceCompletedMessage extends Message {
+  type: string = 'race-completed';
   avatar: Avatar;
   results: RaceResult[];
-}
-
-export type AislMessage = RunSelectedMessage | RaceInitiatedMessage | RaceCompletedMessage | Message;
-
-export function isAislMessage(message: Message): message is AislMessage {
-  return message && [ 'run-selected', 'race-initiated', 'race-completed' ].includes(message.type);
 }
