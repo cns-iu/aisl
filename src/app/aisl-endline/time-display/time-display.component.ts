@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 
 import {Duration, duration} from 'moment';
-import {} from 'moment-duration-format';
+import 'moment-duration-format';
 
 @Component({
   selector: 'aisl-time-display',
@@ -17,9 +17,14 @@ export class TimeDisplayComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.updateTime();
   }
 
   ngOnChange(changes: SimpleChanges) {
+    this.updateTime();
+  }
+
+  private updateTime() {
     this.formattedTime = this.time.format(this.timeFormat, {trim: false});
   }
 
