@@ -2,11 +2,13 @@ import { Message } from './message';
 import { Avatar } from './avatar';
 import { Persona } from './persona';
 
-export interface RunSelectedMessage extends Message {
+export class RunSelectedMessage extends Message {
+  type: string = 'run-selected';
   avatar: Avatar;
 }
 
-export interface RaceInitiatedMessage extends Message {
+export class RaceInitiatedMessage extends Message {
+  type: string = 'race-initiated';
   avatar: Avatar;
 }
 
@@ -18,7 +20,8 @@ export interface RaceResult {
   timeMillis: number;
 }
 
-export interface RaceCompletedMessage extends Message {
+export class RaceCompletedMessage extends Message {
+  type: string = 'race-completed';
   avatar: Avatar;
   results: RaceResult[];
 }

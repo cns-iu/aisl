@@ -6,3 +6,4 @@ export { Avatar } from './shared/avatar';
 export { Persona } from './shared/persona';
 
 export { MessageService } from './shared/message.service';
+export { MockMessageService } from './shared/mock-message.service';
