@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
-import {Duration, duration} from 'moment';
+import { Duration, duration } from 'moment';
+
+import { TimerService } from '../shared/timer.service';
 
 @Component({
   selector: 'aisl-timer-display',
@@ -10,9 +13,13 @@ import {Duration, duration} from 'moment';
 export class TimerDisplayComponent implements OnInit {
   @Input() timerFormat: string = 'ss:SS';
 
-  currentTime: Duration = duration(0);
+  currentTime: Observable<Duration>;
 
-  constructor() { }
+  constructor(private timerService: TimerService) {
+    const timer = this.timerService.getTimer();
+    this.currentTime = timer.asObservable();
+    timer.start();
+  }
 
   ngOnInit() {
   }
