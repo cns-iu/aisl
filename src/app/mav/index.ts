@@ -1,2 +1,2 @@
 //barrel
-export {MavModule} from './mav.module';
+export { MavModule } from './mav.module';
