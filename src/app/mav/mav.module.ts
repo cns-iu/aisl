@@ -5,11 +5,12 @@ import { ScatterplotComponent } from './scatterplot/scatterplot.component';
 import { AttributeSelectorComponent } from './attribute-selector/attribute-selector.component';
 import { DraggableDirective } from './draggable/draggable.directive';
 import { DropTargetDirective } from './drop-target/drop-target.directive';
-
+import { DragService } from './drag.service';
 @NgModule({
   imports: [
     CommonModule
   ],
+  providers: [ DragService ],
   exports: [
     GeomapComponent,
     ScatterplotComponent,

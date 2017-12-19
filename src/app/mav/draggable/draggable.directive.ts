@@ -13,7 +13,7 @@ export class DraggableDirective {
   }
 
   @Input()
-  set myDraggable(options: DraggableOptions) {
+  set mavDraggable(options: DraggableOptions) {
     if (options) {
       this.options = options;
     }

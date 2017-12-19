@@ -9,13 +9,13 @@ export class DropTargetDirective {
   }
 
   @Input()
-  set myDropTarget(options: DropTargetOptions) {
+  set mavDropTarget(options: DropTargetOptions) {
     if (options) {
       this.options = options;
     }
   }
 
-  @Output('myDrop') drop = new EventEmitter();
+  @Output('mavDrop') drop = new EventEmitter();
 
   private options: DropTargetOptions = {};
 
@@ -32,7 +32,7 @@ export class DropTargetDirective {
   @HostListener('drop', ['$event'])
   onDrop(event) {
     const data =  JSON.parse(event.dataTransfer.getData('Text'));
-
+    console.log(data);
     this.drop.next(data);
   }
 }

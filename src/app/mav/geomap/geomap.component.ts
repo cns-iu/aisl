@@ -4,8 +4,8 @@ import * as d3 from 'd3';
 
 @Component({
   selector: 'mav-geomap',
-  templateUrl: './geomap.component.html',
-  styleUrls: ['./geomap.component.sass']
+  templateUrl: './geomap.component.html'
+  // styleUrls: ['./geomap.component.sass']
 })
 export class GeomapComponent implements OnInit {
 
