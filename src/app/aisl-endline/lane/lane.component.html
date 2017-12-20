@@ -1,3 +1,2 @@
-<p>
-  lane works!
-</p>
+<aisl-time-display *ngIf="available" class="time" [time]="time" [timeFormat]="timeFormat"></aisl-time-display>
+<p *ngIf="falseStart" class="false-start">False Start!</p>
