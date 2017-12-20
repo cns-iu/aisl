@@ -10,5 +10,5 @@
 <!-- <div mavDropTarget  class="drop-target">Accepts Draggable A or B</div>
 <div [mavDropTarget]="{zone:'another'}" class="drop-target">Can't drop here</div> -->
 
-<div id="plotContainer" mavDropTarget  >
+<div id="plotContainer" mavDropTarget (mavDrop)="fieldDropped($event)" >
 </div>
