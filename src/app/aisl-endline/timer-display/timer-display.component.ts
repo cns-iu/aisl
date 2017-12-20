@@ -16,9 +16,7 @@ export class TimerDisplayComponent implements OnInit {
   currentTime: Observable<Duration>;
 
   constructor(private timerService: TimerService) {
-    const timer = this.timerService.getTimer();
-    this.currentTime = timer.asObservable();
-    timer.start();
+    this.currentTime = this.timerService.asObservable();
   }
 
   ngOnInit() {
