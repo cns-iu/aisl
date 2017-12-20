@@ -1,5 +1,9 @@
-<aisl-sidebar>
-</aisl-sidebar>
+<mat-sidenav-container class="sidebar-container">
+  <mat-sidenav mode="side" [opened]="true">
+    <aisl-sidebar></aisl-sidebar>
+  </mat-sidenav>
 
-<aisl-main-content>
-</aisl-main-content>
+  <mat-sidenav-content>
+    <aisl-main-content></aisl-main-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>
