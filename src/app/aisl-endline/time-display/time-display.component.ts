@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 
-import {Duration} from 'moment';
-import {} from 'moment-duration-format';
+import { Duration, duration } from 'moment';
+import 'moment-duration-format'; // Import for side effects
 
 @Component({
   selector: 'aisl-time-display',
@@ -9,15 +9,18 @@ import {} from 'moment-duration-format';
   styleUrls: ['./time-display.component.sass']
 })
 export class TimeDisplayComponent implements OnInit {
-  @Input() timeFormat: string = 'mm:ss:SS';
-  @Input() time: Duration;
-
-  formattedTime: string;
+  @Input() time: Duration | null = null;
+  @Input() timeFormat: string | null = null;
 
   constructor() { }
 
   ngOnInit() {
-    this.formattedTime = this.time.format(this.timeFormat);
+  }
+
+  get formattedTime(): string {
+    const time = this.time || duration(0);
+    const timeFormat = this.timeFormat || 'ss:SS';
+    return time.format(timeFormat, {trim: false});
   }
 
 }
