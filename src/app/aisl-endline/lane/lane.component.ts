@@ -36,7 +36,7 @@ export class LaneComponent implements OnInit {
   ngOnInit() {
   }
 
-  get available(): boolean {
+  private get available(): boolean {
     return this.time !== undefined;
   }
 
