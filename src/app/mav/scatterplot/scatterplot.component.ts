@@ -38,33 +38,35 @@ export class ScatterplotComponent implements OnInit {
   }
 
   drawScatterplot(){
-    var data = [[5,3], [10,17], [15,4], [2,8]];
+    let data = [[5,3], [10,17], [15,4], [2,8]];
 
-    var margin = {top: 20, right: 15, bottom: 60, left: 60}
+    let margin = {top: 20, right: 15, bottom: 60, left: 60}
     , width = 960 - margin.left - margin.right
     , height = 500 - margin.top - margin.bottom;
 
-    var x =  d3.scaleLinear()
+    let x =  d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return d[0]; })])
     .range([ 0, width ]);
 
-    var y =  d3.scaleLinear()
+    let y =  d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return d[1]; })])
     .range([ height, 0 ]);
+
     //initializing svg container
     this.svgContainer = d3.select(this.parentNativeElement).select("#plotContainer")
     .append("svg")
     .attr('width', width + margin.right + margin.left)
     .attr('height', height + margin.top + margin.bottom)
     .attr('class', 'chart')
-    var main = this.svgContainer.append('g')
+
+    let main = this.svgContainer.append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
     .attr('width', width)
     .attr('height', height)
     .attr('class', 'main')
 
     // draw the x axis
-    var xAxis = d3.axisBottom(x);
+    let xAxis = d3.axisBottom(x);
 
     main.append('g')
     .attr('transform', 'translate(0,' + height + ')')
@@ -72,14 +74,14 @@ export class ScatterplotComponent implements OnInit {
     .call(xAxis);
 
     // draw the y axis
-    var yAxis = d3.axisLeft(y);
+    let yAxis = d3.axisLeft(y);
 
     main.append('g')
     .attr('transform', 'translate(0,0)')
     .attr('class', 'main axis date')
     .call(yAxis);
 
-    var g = main.append("svg:g");
+    let g = main.append("svg:g");
 
     g.selectAll("scatter-dots")
     .data(data)
