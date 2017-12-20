@@ -1,0 +1,14 @@
+<script src="https://d3js.org/d3.v4.js"></script>
+<p>
+  scatterplot works!
+</p>
+<div>
+  <div [mavDraggable]="{data: 'Draggable A'}" class="draggable">Draggable A</div>
+  <div [mavDraggable]="{data: 'Draggable B'}" class="draggable">Draggable B</div>
+</div>
+
+<!-- <div mavDropTarget  class="drop-target">Accepts Draggable A or B</div>
+<div [mavDropTarget]="{zone:'another'}" class="drop-target">Can't drop here</div> -->
+
+<div id="plotContainer" mavDropTarget  >
+</div>
