@@ -33,6 +33,10 @@ export class ScatterplotComponent implements OnInit {
 
   }
 
+  fieldDropped(field: string) {
+    console.log(field);
+  }
+
   drawScatterplot(){
     var data = [[5,3], [10,17], [15,4], [2,8]];
 
