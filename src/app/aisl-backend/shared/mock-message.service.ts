@@ -7,6 +7,10 @@ import { RunSelectedMessage, RaceInitiatedMessage, RaceCompletedMessage, RaceRes
 
 import { MessageService } from './message.service';
 
+const AVATARS: string[] = [
+  'dinosaur', 't-rex', 'olympian', 'caveman', 'cow', 'dog', 'your mom', 'lemon'
+];
+
 @Injectable()
 export class MockMessageService extends MessageService {
 
@@ -32,8 +36,8 @@ export class MockMessageService extends MessageService {
   }
 
   protected mockRace() {
-    const runSelectedTime = this.randomInt(1,1000),
-      raceInitiatedTime = this.randomInt(1,1000),
+    const runSelectedTime = this.randomInt(2000,7000),
+      raceInitiatedTime = this.randomInt(4000,7000),
       raceCompletedTime = this.randomInt(2000,10000);
 
     setTimeout(() => {
@@ -46,14 +50,14 @@ export class MockMessageService extends MessageService {
           if (this.mocking) {
             this.mockRace();
           }
-        })
+        }, raceCompletedTime);
       }, raceInitiatedTime);
     }, runSelectedTime);
   }
 
   runSelected(): RunSelectedMessage {
     const message = new RunSelectedMessage({
-      avatar: <Avatar>{ name:'cow' }
+      avatar: <Avatar>{ name: this.randFromList<string>(AVATARS) }
     });
     this.send(message);
     return message;
@@ -91,6 +95,10 @@ export class MockMessageService extends MessageService {
   }
   randomBool(): boolean {
     return Math.random() > 0.5;
+  }
+  randFromList<T>(list: T[]): T {
+    const index = this.randomInt(0, list.length - 1);
+    return list[index];
   }
 
 }
