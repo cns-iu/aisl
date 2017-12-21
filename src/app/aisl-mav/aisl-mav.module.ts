@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MaterialModule } from './material.module';
 import { GeomapComponent } from './geomap/geomap.component';
 import { MavModule } from '../mav';
 import { HomeComponent } from './home/home.component';
@@ -9,6 +10,7 @@ import { AttributeSelectorComponent } from './attribute-selector/attribute-selec
 @NgModule({
   imports: [
     CommonModule,
+    MaterialModule,
     MavModule
   ],
   exports : [
