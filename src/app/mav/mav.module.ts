@@ -6,6 +6,7 @@ import { AttributeSelectorComponent } from './attribute-selector/attribute-selec
 import { DraggableDirective } from './draggable/draggable.directive';
 import { DropTargetDirective } from './drop-target/drop-target.directive';
 import { DragService } from './drag.service';
+import { FieldListComponent } from './field-list/field-list.component';
 @NgModule({
   imports: [
     CommonModule
@@ -16,6 +17,6 @@ import { DragService } from './drag.service';
     ScatterplotComponent,
     AttributeSelectorComponent
   ],
-  declarations: [GeomapComponent, ScatterplotComponent, AttributeSelectorComponent, DraggableDirective, DropTargetDirective]
+  declarations: [GeomapComponent, ScatterplotComponent, AttributeSelectorComponent, DraggableDirective, DropTargetDirective, FieldListComponent]
 })
 export class MavModule { }
