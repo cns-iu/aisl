@@ -11,16 +11,16 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
-$aisl-app-primary: mat-palette($mat-pink);
-$aisl-app-accent:  mat-palette($mat-green, A200, A100, A400);
+$aisl-app-primary: mat-palette($mat-pink)
+$aisl-app-accent:  mat-palette($mat-green, A200, A100, A400)
 
 // The warn palette is optional (defaults to red).
-$aisl-app-warn:    mat-palette($mat-orange);
+$aisl-app-warn:    mat-palette($mat-orange)
 
 // Create the theme object (a Sass map containing all of the palettes).
-$aisl-app-theme: mat-light-theme($aisl-app-primary, $aisl-app-accent, $aisl-app-warn);
+$aisl-app-theme: mat-light-theme($aisl-app-primary, $aisl-app-accent, $aisl-app-warn)
 
-@include angular-material-theme($aisl-app-theme);
+@include angular-material-theme($aisl-app-theme)
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
