@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald:300,400,500')
+@import url('')
+
+$open-sans : 'Open Sans', sans-serif
+$oswald: 'Oswald', sans-serif
+$headline: mat-typography-level(32px, 48px, 700)
+$body-1: mat-typography-level(16px, 24px, 500)
+
+// $general-typography : mat-typography-config($font-family: $open-sans $oswald)
+//
+// @include mat-core($general-typography)
+
+$custom-typography: mat-typography-config( $font-family: $open-sans $oswald)
+
+@include mat-core($custom-typography)
+
+// $custom-typography: mat-typography-config($font-family: 'Oswald', monospace $headline: mat-typography-level(32px, 48px, 700) $body-1: mat-typography-level(16px, 24px, 500))
+//
+// @include mat-core($custom-typography)
