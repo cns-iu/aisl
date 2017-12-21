@@ -1,7 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
-// @import '~@angular/material/theming';
-// @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import '~@angular/material/theming'
+@import '~custom-theme.sass'
+@import '~typography.sass'
+
+.card
+   cursor: grab
+
+h3
+  font-family: $oswald
+  font-weight: 400
 
 body
-  font-family: Roboto, Arial, sans-serif
-  margin: 0
+  font-family: $open-sans
+
+// .main-content mat-tab-label
+//   font-family: $oswald !important
