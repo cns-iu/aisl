@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-
-import { Avatar } from '../shared/avatar';
-import { Persona } from '../shared/persona';
-import { Message } from '../shared/message';
+export { Persona } from './database/types/persona';
+import { Avatar } from './database/types/avatar';
+import { Persona } from './database/types/persona';
+import { Message } from './message';
 import { RunSelectedMessage, RaceInitiatedMessage, RaceCompletedMessage, RaceResult } from '../shared/aisl-messages';
 
 import { MessageService } from './message.service';
