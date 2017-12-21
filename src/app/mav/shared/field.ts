@@ -1,4 +1,4 @@
 
 export class Field {
-  label: string;
+  constructor(readonly label: string) { }
 }

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MaterialModule } from './material.module';
 import { GeomapComponent } from './geomap/geomap.component';
 import { ScatterplotComponent } from './scatterplot/scatterplot.component';
 import { AttributeSelectorComponent } from './attribute-selector/attribute-selector.component';
@@ -9,13 +10,15 @@ import { DragService } from './drag.service';
 import { FieldListComponent } from './field-list/field-list.component';
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    MaterialModule
   ],
   providers: [ DragService ],
   exports: [
     GeomapComponent,
     ScatterplotComponent,
-    AttributeSelectorComponent
+    AttributeSelectorComponent,
+    FieldListComponent
   ],
   declarations: [GeomapComponent, ScatterplotComponent, AttributeSelectorComponent, DraggableDirective, DropTargetDirective, FieldListComponent]
 })
