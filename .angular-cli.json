@@ -19,8 +19,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "aisl",
       "styles": [
-        "styles.sass",
-        "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css"
+        "styles.sass"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
