@@ -100,8 +100,6 @@ export class ScatterplotComponent implements OnInit {
     .data(this.data);
 
     // console.log("new",plots);
-    // plots.transition()
-    //         .duration(2000);
 
     plots = plots.enter().append("svg:circle")
       .attr("cx", function (d) { return xscale(d[0]); } )
@@ -109,7 +107,10 @@ export class ScatterplotComponent implements OnInit {
       .attr("r", 8);
 
     if (update) {
-        plots.attr("fill", (d) => (this.data.indexOf(d) !== this.data.length - 1) ? 'black' : 'red');
+        plots.attr("fill", (d) => (this.data.indexOf(d) < this.data.length - 2 ) ? 'black' : 'red');
+        plots.transition()
+                .duration(2000);
+
     }
 
     plots.exit().remove();
@@ -128,7 +129,7 @@ export class ScatterplotComponent implements OnInit {
 
         })
 
-
+        //this.drawAxes();
         this.drawPlots();
 
       }

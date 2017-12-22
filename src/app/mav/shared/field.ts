@@ -1,4 +1,12 @@
 
 export class Field {
-  constructor(readonly label: string) { }
+  label: string;
+  type: string;
+  property: string;
+  datatype: string;
+  kind: string;
+
+  constructor(options: any = {}) {
+    Object.assign(this, options);
+  }
 }

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 
-import { Field } from '../shared/field';
+import { Field } from '../../mav/shared/field';
 
 @Component({
   selector: 'aisl-field-list',
@@ -17,6 +17,7 @@ export class FieldListComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource.data = this.fields;
+    console.log(this.fields);
   }
 
 }
