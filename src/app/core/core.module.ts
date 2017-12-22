@@ -5,12 +5,11 @@ import { CommonModule } from '@angular/common';
 
 import { AislBackendModule, MessageService, MockMessageService, RxdbDatabaseService } from '../aisl-backend';
 
-const USE_MOCK_SERVICE = true;
-
-const PROVIDERS: any[] = [ MessageService, RxdbDatabaseService ];
-if (USE_MOCK_SERVICE) {
-  PROVIDERS[0] = { provide: MessageService, useClass: MockMessageService };
-}
+const PROVIDERS: any[] = [
+  // MessageService,
+  { provide: MessageService, useClass: MockMessageService },
+  RxdbDatabaseService
+];
 
 @NgModule({
   imports: [
