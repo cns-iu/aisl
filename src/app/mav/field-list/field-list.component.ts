@@ -11,7 +11,7 @@ import { Field } from '../shared/field';
 export class FieldListComponent implements OnInit {
   @Input() fields: Field[];
 
-  private dataSource: MatTableDataSource<Field> = new MatTableDataSource();
+  dataSource: MatTableDataSource<Field> = new MatTableDataSource();
 
   constructor() { }
 

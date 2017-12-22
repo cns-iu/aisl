@@ -17,7 +17,7 @@ export class TimeDisplayComponent implements OnInit {
   ngOnInit() {
   }
 
-  private get formattedTime(): string {
+  get formattedTime(): string {
     const time = this.time || duration(0);
     const timeFormat = this.timeFormat || 'ss:SS';
     return time.format(timeFormat, {trim: false});
