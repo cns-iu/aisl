@@ -7,9 +7,10 @@ import { RunSelectedMessage, RaceInitiatedMessage, RaceCompletedMessage, RaceRes
 
 import { MessageService } from './message.service';
 
-const AVATARS: string[] = [
-  'dinosaur', 't-rex', 'olympian', 'caveman', 'cow', 'dog', 'your mom', 'lemon'
-];
+import { MockAvatar } from './database/mocks/avatar.mock';
+import { MockPersona } from './database/mocks/persona.mock';
+
+import { randomInt, randomBool, randFromList } from './database-utils';
 
 @Injectable()
 export class MockMessageService extends MessageService {
@@ -36,9 +37,9 @@ export class MockMessageService extends MessageService {
   }
 
   protected mockRace() {
-    const runSelectedTime = this.randomInt(2000,7000),
-      raceInitiatedTime = this.randomInt(4000,7000),
-      raceCompletedTime = this.randomInt(2000,10000);
+    const runSelectedTime = randomInt(2000,7000),
+      raceInitiatedTime = randomInt(4000,7000),
+      raceCompletedTime = randomInt(2000,10000);
 
     setTimeout(() => {
       const runSelectedMessage = this.runSelected();
@@ -57,7 +58,7 @@ export class MockMessageService extends MessageService {
 
   runSelected(): RunSelectedMessage {
     const message = new RunSelectedMessage({
-      avatar: <Avatar>{ name: this.randFromList<string>(AVATARS) }
+      avatar: MockAvatar()
     });
     this.send(message);
     return message;
@@ -74,8 +75,8 @@ export class MockMessageService extends MessageService {
       avatar,
       results: [this.raceResults(maxTime, 1)]
     });
-    if (this.randomBool()) {
-      message.results.push(this.raceResults(this.randomInt(2000, maxTime), 2));
+    if (randomBool()) {
+      message.results.push(this.raceResults(randomInt(2000, maxTime), 2));
     }
     this.send(message);
     return message;
@@ -83,22 +84,10 @@ export class MockMessageService extends MessageService {
   raceResults(time: number, lane: number): RaceResult {
     return <RaceResult> {
       lane,
-      persona: <Persona>{name: 'person'+this.randomInt(1, 500)},
-      started: this.randomBool(),
-      falseStart: this.randomBool(),
+      persona: MockPersona(),
+      started: randomBool(),
+      falseStart: randomBool(),
       timeMillis: time
     }
   }
-
-  randomInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-  randomBool(): boolean {
-    return Math.random() > 0.5;
-  }
-  randFromList<T>(list: T[]): T {
-    const index = this.randomInt(0, list.length - 1);
-    return list[index];
-  }
-
 }
