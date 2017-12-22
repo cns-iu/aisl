@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { CoreModule } from './core';
+import { MaterialModule } from './mav-mockup/material.module';
 import { AislBackendModule } from './aisl-backend';
 import { AislEndlineModule } from './aisl-endline';
 import { AislMavModule } from './aisl-mav';
@@ -18,7 +19,9 @@ import { MavMockupModule } from './mav-mockup';
     AislBackendModule,
     AislEndlineModule,
     AislMavModule,
-    MavMockupModule
+    MavMockupModule,
+    MaterialModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]
