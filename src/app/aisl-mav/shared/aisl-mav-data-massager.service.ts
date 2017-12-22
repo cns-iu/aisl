@@ -8,16 +8,23 @@ import { Observable } from 'rxjs/Observable';
 export class AislMavDataMassagerService {
 
   raceCompleted: Observable<List<RaceCompletedMessage>>;
-  attributeSelected: string;
+  xAttributeSelected: string;
+  yAttributeSelected: string;
 
   constructor(private messageService: MessageService) {
     this.raceCompleted = <Observable<List<RaceCompletedMessage>>>messageService.asBoundedList(100, RaceCompletedMessage);
-    
+
   }
 
 
-  fieldDropped(fieldDropped){
-    this.attributeSelected =  fieldDropped;
+  xfieldDropped(fieldDropped){
+    this.xAttributeSelected =  fieldDropped;
+    // this.attributeSelected = <Observable<string>>fieldDropped;
+    console.log(fieldDropped);
+  }
+
+  yfieldDropped(fieldDropped){
+    this.yAttributeSelected =  fieldDropped;
     // this.attributeSelected = <Observable<string>>fieldDropped;
     console.log(fieldDropped);
   }
