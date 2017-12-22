@@ -3,11 +3,11 @@ import './rxjs-operators.ts';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AislBackendModule, MessageService, MockMessageService } from '../aisl-backend';
+import { AislBackendModule, MessageService, MockMessageService, RxdbDatabaseService } from '../aisl-backend';
 
 const USE_MOCK_SERVICE = true;
 
-const PROVIDERS: any[] = [ MessageService ];
+const PROVIDERS: any[] = [ MessageService, RxdbDatabaseService ];
 if (USE_MOCK_SERVICE) {
   PROVIDERS[0] = { provide: MessageService, useClass: MockMessageService };
 }

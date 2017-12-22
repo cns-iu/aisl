@@ -23,6 +23,7 @@ export class ScatterplotComponent implements OnInit {
   svgHeight:number = window.innerHeight;//initializing height for map container
   runData:any;
   data:any;
+  
   constructor(element: ElementRef, private massager: AislMavDataMassagerService) {
     this.parentNativeElement = element.nativeElement; //to get native parent element of this component
 
@@ -91,20 +92,9 @@ export class ScatterplotComponent implements OnInit {
     .text("Age");
 
     let g = main.append("svg:g");
-    update(data, g);
+
 
   }
-  update(data:Array<[number,number]>, g){
-  g.selectAll("scatter-dots")
-  .data(data)
-  .enter().append("svg:circle")
-  .attr("cx", function (d,i) { return x(d[0]); } )
-  .attr("cy", function (d) { return y(d[1]); } )
-  .attr("r", 8);
-
-  g.selectAll("scatter-dots")
-  .exit().remove();
-}
 fetchData(){
     this.massager.raceCompleted.subscribe(
       (msg) => {

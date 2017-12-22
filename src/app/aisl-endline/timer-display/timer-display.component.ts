@@ -13,7 +13,7 @@ import { TimerService } from '../shared/timer.service';
 export class TimerDisplayComponent implements OnInit {
   @Input() timerFormat: string = 'ss:SS';
 
-  currentTime: Observable<Duration>;
+  private currentTime: Observable<Duration>;
 
   constructor(private timerService: TimerService) {
     this.currentTime = this.timerService.asObservable();

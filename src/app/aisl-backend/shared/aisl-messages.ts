@@ -1,6 +1,6 @@
 import { Message } from './message';
-import { Avatar } from './avatar';
-import { Persona } from './persona';
+import { Avatar } from './database/types/avatar';
+import { Persona } from './database/types/persona';
 
 export class RunSelectedMessage extends Message {
   type: string = 'run-selected';
