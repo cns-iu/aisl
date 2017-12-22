@@ -1,32 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-
-
+import { Component, OnInit, Input } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
+import { Field } from '../shared/field';
 
 @Component({
   selector: 'mav-attribute-selector',
   templateUrl: './attribute-selector.component.html',
-  styles: [
-    `
-    .draggable {
-      border: 1px solid #ccc;
-      margin: 1rem;
-      padding: 1rem;
-      width: 2.5rem;
-      cursor: move;
-    }
-
-    .drop-target {
-      border: 1px dashed #ebebeb;
-      margin: 1rem;
-      padding: 1rem;
-      width: 2.5rem;
-    }
-    `
-  ]
-  // ,styleUrls: ['./attribute-selector.component.sass']
+  styleUrls: ['./attribute-selector.component.sass']
 })
 export class AttributeSelectorComponent implements OnInit {
 
+  @Input() dataSource: MatTableDataSource<Field> = new MatTableDataSource();
   constructor() { }
 
   ngOnInit() {

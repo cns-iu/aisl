@@ -1,10 +1,10 @@
 
+<mat-table #table [dataSource]="dataSource">
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef>Field Names</mat-header-cell>
+    <mat-cell *matCellDef="let field" [mavDraggable]="field" class = "draggable">{{field.label}}</mat-cell>
+  </ng-container>
 
-<div>
-  <div [mavDraggable]="{data: 'Height'}" class="draggable">Height</div>
-  <div [mavDraggable]="{data: 'State'}" class="draggable">State</div>
-  <div [mavDraggable]="{data: 'falseStart'}" class="draggable">False Start</div>
-</div>
-
-<!-- <div mavDropTarget  class="drop-target">Accepts Draggable A or B</div>
-<div [mavDropTarget]="{zone:'another'}" class="drop-target">Can't drop here</div> -->
+  <mat-header-row *matHeaderRowDef="['name']"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: ['name'];"></mat-row>
+</mat-table>

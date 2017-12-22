@@ -12,7 +12,7 @@ export class AislMavDataMassagerService {
 
   constructor(private messageService: MessageService) {
     this.raceCompleted = <Observable<List<RaceCompletedMessage>>>messageService.asBoundedList(100, RaceCompletedMessage);
-
+    
   }
 
 
