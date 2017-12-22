@@ -1,5 +1,5 @@
 import { Input, HostListener, Directive, HostBinding } from '@angular/core';
-import { DragService } from '../drag.service';
+import { DragService } from '../shared/drag.service';
 @Directive({
   selector: '[mavDraggable]'
 })

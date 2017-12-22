@@ -1,5 +1,12 @@
-import { Output, EventEmitter, Input, HostListener, Directive, HostBinding } from '@angular/core';
-import { DragService } from '../drag.service';
+import { Output,
+  EventEmitter,
+  Input,
+  HostListener,
+  Directive,
+  HostBinding
+} from '@angular/core';
+
+import { DragService } from '../shared/drag.service';
 
 @Directive({
   selector: '[mavDropTarget]'
@@ -25,7 +32,7 @@ export class DropTargetDirective {
     const { zone = 'zone' } = this.options;
 
     if (this.dragService.accepts(zone)) {
-       event.preventDefault();
+      event.preventDefault();
     }
   }
 

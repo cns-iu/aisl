@@ -1,52 +1,44 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component,
+  ElementRef,
+  OnInit,
+  Output,
+  EventEmitter
+} from '@angular/core';
+
 import * as d3 from 'd3';
+import { AislMavDataMassagerService }  from '../../aisl-mav/shared/aisl-mav-data-massager.service';
+
 
 @Component({
   selector: 'mav-scatterplot',
   templateUrl: './scatterplot.component.html',
-  styles: [
-    `
-    .draggable {
-      border: 1px solid #ccc;
-      margin: 1rem;
-      padding: 1rem;
-      width: 6rem;
-      cursor: move;
-    }
-
-    .drop-target {
-      border: 1px dashed #ebebeb;
-      margin: 1rem;
-      padding: 1rem;
-      width: 6rem;
-    }
-    `
-  ]
-  // styleUrls: ['./scatterplot.component.sass']
+  styleUrls: ['./scatterplot.component.sass'],
+  providers: [AislMavDataMassagerService]
 })
 export class ScatterplotComponent implements OnInit {
-
+  /*class attributes declarations */
   private parentNativeElement: any; // a native Element to access this component's selector for drawing the map
   svgContainer=null;
-  constructor(element: ElementRef) {
+  svgWidth:number = window.innerWidth; //initializing width for map container
+  svgHeight:number = window.innerHeight;//initializing height for map container
+  runData:any;
+  data:any;
+  constructor(element: ElementRef, private massager: AislMavDataMassagerService) {
     this.parentNativeElement = element.nativeElement; //to get native parent element of this component
 
+
   }
 
-  fieldDropped(field: string) {
-    console.log(field);
-  }
+  drawScatterplot(data:Array<[number,number]>){
 
-  drawScatterplot(){
-    let data = [[5,3], [10,17], [15,4], [2,8]];
 
     let margin = {top: 20, right: 15, bottom: 60, left: 60}
-    , width = 960 - margin.left - margin.right
-    , height = 500 - margin.top - margin.bottom;
+    , width =  this.svgWidth - margin.left - margin.right
+    , height = this.svgHeight - margin.top - margin.bottom;
 
     let x =  d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return d[0]; })])
-    .range([ 0, width ]);
+    .range([ 0,  width]);
 
     let y =  d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return d[1]; })])
@@ -73,6 +65,14 @@ export class ScatterplotComponent implements OnInit {
     .attr('class', 'main axis date')
     .call(xAxis);
 
+    // text label for the x axis
+    main.append("text")
+    .attr("transform",
+    "translate(" + (width/2) + " ," +
+    (height + margin.top + 20) + ")")
+    .style("text-anchor", "middle")
+    .text("Run-Times");
+
     // draw the y axis
     let yAxis = d3.axisLeft(y);
 
@@ -81,21 +81,47 @@ export class ScatterplotComponent implements OnInit {
     .attr('class', 'main axis date')
     .call(yAxis);
 
+    // text label for the y axis
+    main.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x",0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Age");
+
     let g = main.append("svg:g");
-
-    g.selectAll("scatter-dots")
-    .data(data)
-    .enter().append("svg:circle")
-    .attr("cx", function (d,i) { return x(d[0]); } )
-    .attr("cy", function (d) { return y(d[1]); } )
-    .attr("r", 8);
-
-
+    update(data, g);
 
   }
+  update(data:Array<[number,number]>, g){
+  g.selectAll("scatter-dots")
+  .data(data)
+  .enter().append("svg:circle")
+  .attr("cx", function (d,i) { return x(d[0]); } )
+  .attr("cy", function (d) { return y(d[1]); } )
+  .attr("r", 8);
+
+  g.selectAll("scatter-dots")
+  .exit().remove();
+}
+fetchData(){
+    this.massager.raceCompleted.subscribe(
+      (msg) => {
+        this.runData = msg.toArray();
+        console.log(this.runData);
+
+
+
+      }
+    );
+  }
+
 
   ngOnInit() {
-    this.drawScatterplot();
-  }
+   this.data = [[5,3], [10,2], [15,1], [2,4]];
+   this.drawScatterplot(this.data);
+   this.fetchData();
 
+}
 }
