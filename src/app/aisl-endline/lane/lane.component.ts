@@ -14,8 +14,8 @@ export class LaneComponent implements OnInit {
   @Input() laneId: number;
   @Input() timeFormat: string | null = null;
 
-  private falseStart: boolean = false;
-  private time?: Duration;
+  falseStart: boolean = false;
+  time?: Duration;
 
   constructor(private messageService: MessageService) {
     this.messageService.asObservable().subscribe((msg) => {
@@ -36,7 +36,7 @@ export class LaneComponent implements OnInit {
   ngOnInit() {
   }
 
-  private get available(): boolean {
+  get available(): boolean {
     return this.time !== undefined;
   }
 
