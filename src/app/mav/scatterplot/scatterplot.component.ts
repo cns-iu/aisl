@@ -32,7 +32,7 @@ export class ScatterplotComponent implements OnInit {
   yScale: any;
   xAxisLabel: string = "Age";
 
-  constructor(element: ElementRef, private massager: AislMavDataMassagerService) {
+  constructor(element: ElementRef, public massager: AislMavDataMassagerService) {
     this.parentNativeElement = element.nativeElement; //to get native parent element of this component
   }
 
@@ -87,11 +87,11 @@ export class ScatterplotComponent implements OnInit {
 
     this.svgG = main.append("svg:g");
 
-    this.drawPlots();
+    this.drawPlots(false);
   }
 
 /********* This function draws points on the scatterplot ********/
-  drawPlots(){
+  drawPlots(update:boolean = true){
 
     let xscale = this.xScale;
     let yscale = this.yScale;
@@ -103,10 +103,16 @@ export class ScatterplotComponent implements OnInit {
     // plots.transition()
     //         .duration(2000);
 
-    plots.enter().append("svg:circle")
-    .attr("cx", function (d) { return xscale(d[0]); } )
-    .attr("cy", function (d) { return yscale(d[1]); } )
-    .attr("r", 8)
+    plots = plots.enter().append("svg:circle")
+      .attr("cx", function (d) { return xscale(d[0]); } )
+      .attr("cy", function (d) { return yscale(d[1]); } )
+      .attr("r", 8);
+
+    if (update) {
+        plots.attr("fill", (d) => (this.data.indexOf(d) !== this.data.length - 1) ? 'black' : 'red');
+    }
+
+    plots.exit().remove();
 
   }
 
@@ -118,7 +124,7 @@ export class ScatterplotComponent implements OnInit {
       (msg) => {
         let runData = msg.toArray();
         runData[0].results.forEach(function(d){
-          refToData.push([Math.random()*2, d.timeMillis/1000]);
+          refToData.push([Math.random()*((15 - 1) + 1), d.timeMillis/1000]);
 
         })
 
