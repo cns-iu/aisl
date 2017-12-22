@@ -1,14 +1,14 @@
 
-<div id="plotContainer" >
+<div id="plotContainer">
 </div>
 
 
  Attributes Selected - <hr>
- <div [mavDropTarget] (mavDrop)="massager.xfieldDropped($event)">
-   X-Axis: {{ massager.xAttributeSelected?.label }}
+ <div [mavDropTarget] (mavDrop)="xfieldDropped($event)">
+   X-Axis: {{ xAttributeSelected?.label }}
   <br>
 </div>
 <hr>
-<div [mavDropTarget] (mavDrop)="massager.yfieldDropped($event)">
-  Y-Axis: {{ massager.yAttributeSelected?.label }}
+<div [mavDropTarget] (mavDrop)="yfieldDropped($event)">
+  Y-Axis: {{ yAttributeSelected?.label }}
 </div>

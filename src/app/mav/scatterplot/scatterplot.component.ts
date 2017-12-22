@@ -1,39 +1,59 @@
 import { Component,
   ElementRef,
+  OnChanges,
   OnInit,
+  Input,
   Output,
+  SimpleChanges,
   EventEmitter
 } from '@angular/core';
+
+import { Field } from '../shared/field';
 
 import * as d3 from 'd3';
 import * as d3Scale from 'd3-scale';
 
-import { AislMavDataMassagerService }  from '../../aisl-mav/shared/aisl-mav-data-massager.service';
 
 
 @Component({
   selector: 'mav-scatterplot',
   templateUrl: './scatterplot.component.html',
   styleUrls: ['./scatterplot.component.sass'],
-  providers: [AislMavDataMassagerService]
+
 })
 
 
-export class ScatterplotComponent implements OnInit {
+export class ScatterplotComponent implements OnInit, OnChanges {
   /*class attributes declarations */
   private parentNativeElement: any; // a native Element to access this component's selector for drawing the map
   svgContainer=null;
   margin = {top: 20, right: 15, bottom: 60, left: 60}
   svgWidth: number = window.innerWidth - this.margin.left - this.margin.right - 300; //initializing width for map container
   svgHeight: number = window.innerHeight - this.margin.top - this.margin.bottom - 200;//initializing height for map container
-  data: any;
+  @Input() data: any;
   svgG: any;
   xScale: any;
   yScale: any;
   xAxisLabel: string = "Age";
+  xAttributeSelected: Field;
+  yAttributeSelected: Field;
 
-  constructor(element: ElementRef, public massager: AislMavDataMassagerService) {
+  @Output() xAttributeChanged = new EventEmitter<Field>();
+  @Output() yAttributeChanged = new EventEmitter<Field>();
+
+
+  constructor(element: ElementRef) {
     this.parentNativeElement = element.nativeElement; //to get native parent element of this component
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (let propName in changes) {
+      if (propName === 'data' && this.data !=null && this.svgG!=null) {
+         this.setScales(this.data)
+        // this.drawAxes();
+        this.drawPlots(true);
+      }
+    }
   }
 
 /****** This function draws the svg container, axes and their labels ******/
@@ -117,24 +137,6 @@ export class ScatterplotComponent implements OnInit {
 
   }
 
-/*** This function gets data from massager service based on fields selected ***/
-  fetchData(){
-    let refToData = this.data;
-
-    this.massager.raceCompleted.subscribe(
-      (msg) => {
-        let runData = msg.toArray();
-        runData[0].results.forEach(function(d){
-          refToData.push([Math.random()*((15 - 1) + 1), d.timeMillis/1000]);
-
-        })
-
-        //this.drawAxes();
-        this.drawPlots();
-
-      }
-    );
-  }
 
 /**** This function sets scales on x and y axes based on fields selected *****/
   setScales(data:Array<[number,number]>){
@@ -148,17 +150,25 @@ export class ScatterplotComponent implements OnInit {
   }
 
 
+
+    xfieldDropped(fieldDropped){
+      this.xAttributeSelected =  fieldDropped;
+      console.log(fieldDropped);
+      this.xAttributeChanged.next(this.xAttributeSelected);
+    }
+
+    yfieldDropped(fieldDropped){
+      this.yAttributeSelected =  fieldDropped;
+      console.log(fieldDropped);
+      this.yAttributeChanged.next(this.yAttributeSelected);
+    }
+
   ngOnInit() {
     this.data = [[5,3], [10,2], [15,1], [2,4]];
-    this.setScales(this.data)
+    this.setScales(this.data);
     this.drawAxes();
-    this.fetchData();
-    // this.massager.attribute.subscribe(
-    //   (msg) => {
-    //     console.log(msg);
-    //
-    // });
 
   }
+
 
 }

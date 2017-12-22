@@ -1,2 +1,4 @@
-<mav-scatterplot>
+<mav-scatterplot [data]="data"
+(xAttributeChanged)="setXAttribute($event)"
+(yAttributeChanged)="setYAttribute($event)">
 </mav-scatterplot>
