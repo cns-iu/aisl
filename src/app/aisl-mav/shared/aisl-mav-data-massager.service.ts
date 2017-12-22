@@ -7,18 +7,20 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class AislMavDataMassagerService {
 
-raceCompleted: Observable<List<RaceCompletedMessage>>;
-runData: Object;
+  raceCompleted: Observable<List<RaceCompletedMessage>>;
+  attributeSelected: string;
 
-constructor(private messageService: MessageService) {
-  this.raceCompleted = <Observable<List<RaceCompletedMessage>>>messageService.asBoundedList(100, RaceCompletedMessage);
+  constructor(private messageService: MessageService) {
+    this.raceCompleted = <Observable<List<RaceCompletedMessage>>>messageService.asBoundedList(100, RaceCompletedMessage);
 
   }
 
 
-fieldDropped(data){
-  console.log(data);
-}
+  fieldDropped(fieldDropped){
+    this.attributeSelected =  fieldDropped;
+    // this.attributeSelected = <Observable<string>>fieldDropped;
+    console.log(fieldDropped);
+  }
 
 
 }
