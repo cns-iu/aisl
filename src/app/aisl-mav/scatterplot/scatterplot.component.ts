@@ -9,7 +9,7 @@ import { Field } from '../../mav/shared/field';
 })
 export class ScatterplotComponent implements OnInit {
 
-  newData:[[number, number]] = [[5,3], [10,2], [15,1], [2,4]];
+  newData:[number, number][] = [[5,2], [5,3], [1,2], [5,1], [2,4]];
   xAttributeSelected:Field;
   yAttributeSelected:Field;
 
@@ -29,10 +29,11 @@ export class ScatterplotComponent implements OnInit {
           let runData = msg.toArray();
           runData[0].results.forEach((d) =>{
             const data = {'persona': d.persona, 'avatar': runData[0].avatar, 'run': d};
-            this.newData.push([Math.random()*((15 - 1) + 1),data[yAttrType][yAttrName]/1000]);
+            // this.newData.push([Math.random()*((15 - 1) + 1), data[yAttrType][yAttrName]/1000]);
+            this.newData.push([Math.random()*4, data[yAttrType][yAttrName]/1000]);
             console.log("newData from aisl-mav", this.newData);
           });
-          // this.newData = this.newData.concat();
+          this.newData = this.newData.concat();
         }
       );
     }
