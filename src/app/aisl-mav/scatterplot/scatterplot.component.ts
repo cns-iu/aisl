@@ -9,7 +9,7 @@ import { Field } from '../../mav/shared/field';
 })
 export class ScatterplotComponent implements OnInit {
 
-  newData:[number, number][] = [[5,2], [5,3], [1,2], [5,1], [2,4]];
+  newData:[number, number][] = [];
   xAttributeSelected:Field;
   yAttributeSelected:Field;
 
