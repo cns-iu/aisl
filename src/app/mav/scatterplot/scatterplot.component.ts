@@ -16,7 +16,7 @@ import {
   scalePow,
   scaleTime
 } from 'd3-scale';
-import { Selection } from 'd3-selection';
+import * as d3Selection from 'd3-selection';
 import { Transition } from 'd3-transition';
 import * as d3Array from 'd3-array';
 // import { timeMinute } from 'd3-time';
@@ -40,8 +40,8 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   private parentNativeElement: any; // a native Element to access this component's selector for drawing the map
   svgContainer = null;
   svgG: any;
-  xScale: d3Axis.AxisScale<any>;
-  yScale: d3Axis.AxisScale<number>;
+  xScale: any;
+  yScale: any;
   xAxisLabel = 'Age';
   xAttributeSelected: Field;
   yAttributeSelected: Field;
@@ -49,8 +49,8 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   ytype = 'number';
   xAxisGroup: any = null;
   yAxisGroup: any = null;
-  xAxis: any;
-  yAxis: any;
+  xAxis: d3Axis.Axis<{}>;
+  yAxis: d3Axis.Axis<{}>;
   @Output() xAttributeChanged = new EventEmitter<Field>();
   @Output() yAttributeChanged = new EventEmitter<Field>();
   update = false;
@@ -74,49 +74,50 @@ export class ScatterplotComponent implements OnInit, OnChanges {
 /****** This function draws the svg container, axes and their labels ******/
 initVisualization() {
   // initializing svg container
-  this.svgContainer = d3.select(this.parentNativeElement).select('#plotContainer')
-  .append('svg')
-  .attr('width', this.svgWidth + this.margin.right + this.margin.left)
-  .attr('height', this.svgHeight + this.margin.top + this.margin.bottom)
-  .attr('class', 'chart');
+  this.svgContainer = d3Selection.select(this.parentNativeElement)
+                      .select('#plotContainer')
+                      .append('svg')
+                      .attr('width', this.svgWidth + this.margin.right + this.margin.left)
+                      .attr('height', this.svgHeight + this.margin.top + this.margin.bottom)
+                      .attr('class', 'chart');
 
   const main = this.svgContainer.append('g')
-  .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')')
-  .attr('width', this.svgWidth)
-  .attr('height', this.svgHeight)
-  .attr('class', 'main');
+              .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')')
+              .attr('width', this.svgWidth)
+              .attr('height', this.svgHeight)
+              .attr('class', 'main');
 
   // draw the x axis
   this.xAxis = d3Axis.axisBottom(this.xScale);
 
   this.xAxisGroup = main.append('g')
-  .attr('transform', 'translate(0,' + this.svgHeight + ')')
-  .attr('class', 'xAxis')
-  .call(this.xAxis);
+                    .attr('transform', 'translate(0,' + this.svgHeight + ')')
+                    .attr('class', 'xAxis')
+                    .call(this.xAxis);
 
   // text label for the x axis
   main.append('text')
-  .attr('transform',
-  'translate(' + (this.svgWidth / 2) + ' ,' +
-  (this.svgHeight + this.margin.top + 20) + ')')
-  .style('text-anchor', 'middle')
-  .text(this.xAxisLabel);
+      .attr('transform',
+      'translate(' + (this.svgWidth / 2) + ' ,' +
+      (this.svgHeight + this.margin.top + 20) + ')')
+      .style('text-anchor', 'middle')
+      .text(this.xAxisLabel);
 
   // draw the y axis
   this.yAxis = d3Axis.axisLeft(this.yScale);
   this.yAxisGroup = main.append('g')
-  .attr('transform', 'translate(0,0)')
-  .attr('class', 'yAxis')
-  .call(this.yAxis);
+                    .attr('transform', 'translate(0,0)')
+                    .attr('class', 'yAxis')
+                    .call(this.yAxis);
 
   // text label for the y axis
   main.append('text')
-  .attr('transform', 'rotate(-90)')
-  .attr('y', 0 - this.margin.left)
-  .attr('x', 0 - (this.svgHeight / 2))
-  .attr('dy', '1em')
-  .style('text-anchor', 'middle')
-  .text('Run-Times');
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 0 - this.margin.left)
+      .attr('x', 0 - (this.svgHeight / 2))
+      .attr('dy', '1em')
+      .style('text-anchor', 'middle')
+      .text('Run-Times');
 
   this.svgG = main.append('g');
 
@@ -132,16 +133,17 @@ drawPlots() {
   const yscale = this.yScale;
 
   const plots = this.svgG.selectAll('circle')
-  .data(this.newData);
+                .data(this.newData);
 
   plots.enter().append('circle')
-  .attr('cx', function (d) { return xscale(d[0]); } )
-  .attr('cy', function (d) { return yscale(d[1]); } )
-  .attr('r', 10)
-  .attr('fill', 'red')
-  .transition().duration(5000).attr('fill', 'black').attr('r', 8);
+              .attr('cx', function (d) { return xscale(d[0]); } )
+              .attr('cy', function (d) { return yscale(d[1]); } )
+              .attr('r', 10)
+              .attr('fill', 'red')
+              .transition().duration(5000).attr('fill', 'black').attr('r', 8);
 
   plots.exit().remove();
+
 }
 
 /**** This function sets scales on x and y axes based on fields selected *****/
@@ -152,26 +154,26 @@ setScales() {
     if (!this.xScale) {
       this.xScale = scaleLinear();
     }
-    this.xScale.domain([0, d3Array.max(this.newData, function(d) { return d[0]; })])
-    .range([ 0,  this.svgWidth]);
-    break;
+      this.xScale.domain([0, d3Array.max(this.newData, function(d) { return d[0]; })])
+        .range([ 0,  this.svgWidth]);
+        break;
 
     case 'string' : // blah;
-    break;
+        break;
   }
 
   switch (this.ytype) {
     default:
-    case 'number' :
-    if (!this.yScale) {
-      this.yScale = scaleLinear();
-    }
-    this.yScale.domain([0, d3Array.max(this.newData, function(d) { return d[1]; })])
-    .range([ this.svgHeight, 0 ]);
-    break;
+      case 'number' :
+      if (!this.yScale) {
+        this.yScale = scaleLinear();
+      }
+        this.yScale.domain([0, d3Array.max(this.newData, function(d) { return d[1]; })])
+        .range([ this.svgHeight, 0 ]);
+        break;
 
     case 'string' :  // blah
-    break;
+        break;
 
   }
 }
