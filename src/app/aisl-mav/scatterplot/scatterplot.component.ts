@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AislMavDataMassagerService }  from '../shared/aisl-mav-data-massager.service';
+import { AislMavDataMassagerService } from '../shared/aisl-mav-data-massager.service';
 import { Field } from '../../mav/shared/field';
 @Component({
   selector: 'aisl-scatterplot',
@@ -9,29 +9,29 @@ import { Field } from '../../mav/shared/field';
 })
 export class ScatterplotComponent implements OnInit {
 
-  newData:[number, number][] = [[5,2], [5,3], [1,2], [5,1], [2,4]];
-  xAttributeSelected:Field;
-  yAttributeSelected:Field;
+  newData: [number, number][] = [];
+  xAttributeSelected: Field;
+  yAttributeSelected: Field;
 
   constructor(public massager: AislMavDataMassagerService ) { }
 
   /*** This function gets data from massager service based on fields selected ***/
-    fetchData(){
-      if ((this.xAttributeSelected==null) || (this.yAttributeSelected==null))
-        return;
-      let xAttrName = this.xAttributeSelected.property;
-      let yAttrName = this.yAttributeSelected.property;
-      let xAttrType = this.xAttributeSelected.type;
-      let yAttrType = this.yAttributeSelected.type;
+    fetchData() {
+      if ((this.xAttributeSelected == null) || (this.yAttributeSelected == null)) {
+        return; }
+      const xAttrName = this.xAttributeSelected.property;
+      const yAttrName = this.yAttributeSelected.property;
+      const xAttrType = this.xAttributeSelected.type;
+      const yAttrType = this.yAttributeSelected.type;
 
       this.massager.raceCompleted.subscribe(
         (msg) => {
-          let runData = msg.toArray();
-          runData[0].results.forEach((d) =>{
+          const runData = msg.toArray();
+          runData[0].results.forEach((d) => {
             const data = {'persona': d.persona, 'avatar': runData[0].avatar, 'run': d};
             // this.newData.push([Math.random()*((15 - 1) + 1), data[yAttrType][yAttrName]/1000]);
-            this.newData.push([Math.random()*4, data[yAttrType][yAttrName]/1000]);
-            console.log("newData from aisl-mav", this.newData);
+            this.newData.push([Math.random() * 4, data[yAttrType][yAttrName] / 1000]);
+            console.log('newData from aisl-mav', this.newData);
           });
           this.newData = this.newData.concat();
         }
@@ -40,16 +40,16 @@ export class ScatterplotComponent implements OnInit {
 
   ngOnInit() {
 
-  //this.fetchData();
+  // this.fetchData();
   }
 
-  setXAttribute(xAttr){
+  setXAttribute(xAttr) {
     console.log(xAttr);
     this.xAttributeSelected = xAttr;
     this.fetchData();
   }
 
-  setYAttribute(yAttr){
+  setYAttribute(yAttr) {
       console.log(yAttr);
       this.yAttributeSelected = yAttr;
       this.fetchData();

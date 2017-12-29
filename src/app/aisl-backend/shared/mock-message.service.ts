@@ -37,9 +37,9 @@ export class MockMessageService extends MessageService {
   }
 
   protected mockRace() {
-    const runSelectedTime = randomInt(2000,7000),
-      raceInitiatedTime = randomInt(4000,7000),
-      raceCompletedTime = randomInt(2000,10000);
+    const runSelectedTime = randomInt(2000, 7000),
+    raceInitiatedTime = randomInt(4000, 7000),
+    raceCompletedTime = randomInt(2000, 10000);
 
     setTimeout(() => {
       const runSelectedMessage = this.runSelected();
@@ -88,6 +88,6 @@ export class MockMessageService extends MessageService {
       started: randomBool(),
       falseStart: randomBool(),
       timeMillis: time
-    }
+    };
   }
 }
