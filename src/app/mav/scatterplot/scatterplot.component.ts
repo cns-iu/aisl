@@ -39,7 +39,7 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   /*class attributes declarations */
   private parentNativeElement: any; // a native Element to access this component's selector for drawing the map
   svgContainer: any;
-  svgG: d3Selection.Selection<SVGGElement, any, HTMLElement, any>;
+  svgG: any; // d3Selection.Selection<SVGGElement, any, HTMLElement, any>;
   xScale: any; // d3Axis.AxisScale<any>
   yScale: any; // d3Axis.AxisScale<any>
   xAxisLabel = 'Age';
@@ -47,10 +47,10 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   yAttributeSelected: Field;
   xtype = 'number';
   ytype = 'number';
-  xAxisGroup: d3Selection.Selection<SVGGElement, any, HTMLElement, any> = null;
-  yAxisGroup: d3Selection.Selection<SVGGElement, any, HTMLElement, any> = null;
-  xAxis: d3Axis.Axis<{}>;
-  yAxis: d3Axis.Axis<{}>;
+  xAxisGroup: any; // d3Selection.Selection<SVGGElement, any, HTMLElement, any> = null;
+  yAxisGroup: any; // d3Selection.Selection<SVGGElement, any, HTMLElement, any> = null;
+  xAxis: any; // d3Axis.Axis<{}>;
+  yAxis: any; // d3Axis.Axis<{}>;
   @Output() xAttributeChanged = new EventEmitter<Field>();
   @Output() yAttributeChanged = new EventEmitter<Field>();
   update = false;
