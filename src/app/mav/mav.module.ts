@@ -1,33 +1,38 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../shared/shared.module';
+import { MatTableModule, MatTabsModule, MatSidenavModule } from '@angular/material';
+
+import { DinoGeomapModule } from '../dino-geomap';
+import { DinoScatterplotModule } from '../dino-scatterplot';
+
 import { GeomapComponent } from './geomap/geomap.component';
 import { ScatterplotComponent } from './scatterplot/scatterplot.component';
 import { AttributeSelectorComponent } from './attribute-selector/attribute-selector.component';
 import { DraggableDirective } from './draggable/draggable.directive';
 import { DropTargetDirective } from './drop-target/drop-target.directive';
 import { DragService } from './shared/drag.service';
-import { AislMavDataMassagerService } from '../aisl-mav/shared/aisl-mav-data-massager.service';
+
+const components: any[] = [
+  GeomapComponent,
+  ScatterplotComponent,
+  AttributeSelectorComponent,
+  DraggableDirective,
+  DropTargetDirective
+]
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule
+    MatTableModule,
+    MatTabsModule,
+    MatSidenavModule,
+    DinoGeomapModule,
+    DinoScatterplotModule
   ],
+  exports: components,
   providers: [
-    DragService,
-    AislMavDataMassagerService ],
-  exports: [
-    GeomapComponent,
-    ScatterplotComponent,
-    AttributeSelectorComponent
-
+    DragService
   ],
-  declarations: [GeomapComponent,
-    ScatterplotComponent,
-    AttributeSelectorComponent,
-    DraggableDirective,
-    DropTargetDirective
-   ]
-  })
-  export class MavModule { }
+  declarations: components
+})
+export class MavModule { }

@@ -2,12 +2,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { CoreModule } from './core';
-import { MaterialModule } from './mav-mockup/material.module';
+import { SharedModule } from './shared';
+
 import { AislBackendModule } from './aisl-backend';
 import { AislEndlineModule } from './aisl-endline';
 import { AislMavModule } from './aisl-mav';
-import { AppComponent } from './app.component';
 import { MavMockupModule } from './mav-mockup';
+
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
@@ -16,12 +18,11 @@ import { MavMockupModule } from './mav-mockup';
   imports: [
     BrowserModule,
     CoreModule,
+    SharedModule,
     AislBackendModule,
     AislEndlineModule,
     AislMavModule,
-    MavMockupModule,
-    MaterialModule
-
+    MavMockupModule
   ],
   providers: [],
   bootstrap: [AppComponent]
