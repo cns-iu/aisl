@@ -74,17 +74,17 @@ let collections = [
     {
         name: 'avatar',
         schema: AvatarSchema,
-        sync: true
+        sync: false
     },
     {
         name: 'persona',
         schema: PersonaSchema,
-        sync: true
+        sync: false
     },
     {
         name: 'run',
         schema: RunSchema,
-        sync: true,
+        sync: false,
         methods: {
             asRun() {
               return RxRunTypeAsRun(this);
