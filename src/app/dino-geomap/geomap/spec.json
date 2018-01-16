@@ -1,0 +1,103 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v3.0.json",
+  "width": 900,
+  "height": 560,
+  "padding": {
+    "top": 0,
+    "left": 0,
+    "right": 0,
+    "bottom": 0
+  },
+  "data": [
+    {
+      "name": "stateColorCoding"
+    },
+    {
+      "name": "states",
+      "url": "data/us-10m.json",
+      "format": {
+        "type": "topojson",
+        "feature": "states"
+      },
+      "transform": [
+        {
+          "type": "geopath",
+          "projection": "projection"
+        },
+        {
+          "type": "lookup",
+          "from": "stateColorCoding",
+          "key": "id",
+          "fields": [
+            "id"
+          ],
+          "values": [
+            "value"
+          ],
+          "as": [
+            "colorValue"
+          ],
+          "default": 0
+        },
+        {
+          "type": "collect",
+          "sort": {
+            "field": [
+              "colorValue",
+              "id"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "signals": [],
+  "scales": [
+    {
+      "name": "stateColor",
+      "type": "ordinal",
+      "range": {
+        "scheme": "category20"
+      }
+    }
+  ],
+  "projections": [
+    {
+      "name": "projection",
+      "type": "albersUsa",
+      "scale": 1200,
+      "translate": [
+        {
+          "signal": "width / 2"
+        },
+        {
+          "signal": "height / 2"
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "type": "path",
+      "from": {
+        "data": "states"
+      },
+      "encode": {
+        "enter": {
+          "fill": {
+            "scale": "stateColor",
+            "field": "colorValue"
+          },
+          "stroke": {
+            "value": "white"
+          }
+        },
+        "update": {
+          "path": {
+            "field": "path"
+          }
+        }
+      }
+    }
+  ]
+}
