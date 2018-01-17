@@ -14,11 +14,6 @@
     },
     {
       "name": "states",
-      "url": "data/us-10m.json",
-      "format": {
-        "type": "topojson",
-        "feature": "states"
-      },
       "transform": [
         {
           "type": "geopath",

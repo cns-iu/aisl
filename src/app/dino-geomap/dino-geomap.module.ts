@@ -6,6 +6,7 @@ import { GeomapComponent } from './geomap/geomap.component';
   imports: [
     CommonModule
   ],
+  exports: [GeomapComponent],
   declarations: [GeomapComponent]
 })
 export class DinoGeomapModule { }
