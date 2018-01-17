@@ -13,13 +13,6 @@ export class GeomapComponent implements OnInit, OnDestroy {
   private nativeElement: any;
   private view: any = null;
 
-  @Input()
-  set logLevel(level: number) {
-    if (this.view) {
-      this.view.logLevel(level);
-    }
-  }
-
   constructor(element: ElementRef) {
     this.nativeElement = element.nativeElement;
   }
