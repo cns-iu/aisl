@@ -32,16 +32,7 @@
           "as": [
             "colorValue"
           ],
-          "default": 0
-        },
-        {
-          "type": "collect",
-          "sort": {
-            "field": [
-              "colorValue",
-              "id"
-            ]
-          }
+          "default": "#bebebe"
         }
       ]
     },
@@ -64,15 +55,7 @@
     }
   ],
   "signals": [],
-  "scales": [
-    {
-      "name": "stateColor",
-      "type": "ordinal",
-      "range": {
-        "scheme": "category20"
-      }
-    }
-  ],
+  "scales": [],
   "projections": [
     {
       "name": "projection",
@@ -97,7 +80,6 @@
       "encode": {
         "enter": {
           "fill": {
-            "scale": "stateColor",
             "field": "colorValue"
           },
           "stroke": {
