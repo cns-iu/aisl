@@ -18,7 +18,7 @@ const components: any[] = [
   AttributeSelectorComponent,
   DraggableDirective,
   DropTargetDirective
-]
+];
 
 @NgModule({
   imports: [

@@ -1,4 +1,2 @@
-<mav-scatterplot [newData]="newData"
-(xAttributeChanged)="setXAttribute($event)"
-(yAttributeChanged)="setYAttribute($event)">
+<mav-scatterplot [stream]="massager.stream" (xAttributeChanged)="setXAttribute($event)" (yAttributeChanged)="setYAttribute($event)">
 </mav-scatterplot>

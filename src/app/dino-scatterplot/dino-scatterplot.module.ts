@@ -6,6 +6,9 @@ import { ScatterplotComponent } from './scatterplot/scatterplot.component';
   imports: [
     CommonModule
   ],
+  exports: [
+    ScatterplotComponent
+  ],
   declarations: [ScatterplotComponent]
 })
 export class DinoScatterplotModule { }
