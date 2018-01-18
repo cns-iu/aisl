@@ -9,11 +9,15 @@ import {
   EventEmitter
 } from '@angular/core';
 
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+
 import * as d3Axis from 'd3-axis';
 import * as d3Selection from 'd3-selection';
+import 'd3-transition'; // This adds transition support to d3-selection
 import * as d3Array from 'd3-array';
 import { scaleLinear, scaleOrdinal, scalePow, scaleTime } from 'd3-scale';
-import { Transition } from 'd3-transition';
+
 import { Field } from '../shared/field';
 
 @Component({
@@ -26,11 +30,12 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   @Input() margin = { top: 20, right: 15, bottom: 60, left: 60 };
   @Input() svgWidth: number = window.innerWidth - this.margin.left - this.margin.right - 300; // initializing width for map container
   @Input() svgHeight: number = window.innerHeight - this.margin.top - this.margin.bottom - 200; // initializing height for map container
-  @Input() stream = [];
+  @Input() stream: Observable<any[]>;
   @Input() xAttrType: string;
   @Input() yAttrType: string;
   @Output() xAttributeChanged = new EventEmitter<Field>();
   @Output() yAttributeChanged = new EventEmitter<Field>();
+  private streamSubscription: Subscription;
   private parentNativeElement: any; // a native Element to access this component's selector for drawing the map
   svgContainer: d3Selection.Selection<d3Selection.BaseType, any, HTMLElement, undefined>;
   containerMain: d3Selection.Selection<d3Selection.BaseType, any, HTMLElement, undefined>;
@@ -53,12 +58,15 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes['stream'].isFirstChange()) {
-      for (const propName in changes) {
-        if (propName === 'stream') {
-          this.setScales();
-          this.drawPlots();
+    for (const propName in changes) {
+      if (propName === 'stream' && this.stream) {
+        if (this.streamSubscription) {
+          this.streamSubscription.unsubscribe();
         }
+        this.streamSubscription = this.stream.subscribe((data) => {
+          this.setScales(data);
+          this.drawPlots(data);
+        });
       }
     }
   }
@@ -116,11 +124,11 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   }
 
   /********* This function draws points on the scatterplot ********/
-  drawPlots() {
+  drawPlots(data: any[]) {
     const xscale = this.xScale;
     const yscale = this.yScale;
     const plots = this.mainG.selectAll('circle')
-      .data(this.stream);
+      .data(data);
 
     this.xAxisGroup.transition().call(this.xAxis);  // Update X-Axis
     this.yAxisGroup.transition().call(this.yAxis);  // Update Y-Axis
@@ -139,14 +147,14 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   }
 
   /**** This function sets scales on x and y axes based on fields selected *****/
-  setScales() {
+  setScales(data: any[]) {
     switch (this.xtype) {
       default:
       case 'number':
         if (!this.xScale) {
           this.xScale = scaleLinear();
         }
-        this.xScale.domain([0, d3Array.max(this.stream, (d) => {
+        this.xScale.domain([0, d3Array.max(data, (d) => {
           return d['persona'][this.xAttributeSelected['type']];
         })])
           .range([0, this.svgWidth]);
@@ -162,7 +170,7 @@ export class ScatterplotComponent implements OnInit, OnChanges {
         if (!this.yScale) {
           this.yScale = scaleLinear();
         }
-        this.yScale.domain([0, d3Array.max(this.stream, (d) => {
+        this.yScale.domain([0, d3Array.max(data, (d) => {
           return d['persona'][this.yAttributeSelected['type']];
         })]).range([this.svgHeight, 0]);
         break;
@@ -185,7 +193,7 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.setScales();
+    this.setScales([]);
     this.initVisualization();
   }
 }

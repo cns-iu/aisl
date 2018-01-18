@@ -8,11 +8,10 @@
     <span>AISL Demo (this is a work in progress)</span>
   </mat-toolbar>
   <div class="main-content mat-typography">
-    <mat-tab-group #tabs>
+    <mat-tab-group (selectedTabChange)="selectedIndex = tabs.selectedIndex" #tabs>
       <mat-tab label="Home">
         <h1>AISL Demo</h1>
-        <h2> This is a work in progress!</h2>
-        Choose a tab to see individual screens.
+        <h2> This is a work in progress!</h2> Choose a tab to see individual screens.
       </mat-tab>
       <mat-tab label="Backend">
         <div class="aisl-screen">
@@ -23,8 +22,9 @@
       <mat-tab label="Endline"></mat-tab>
       <mat-tab label="Mockup"></mat-tab>
     </mat-tab-group>
-</div>
+  </div>
 
-<aisl-mav-home *ngIf="!activeScreen && tabs.selectedIndex == 2"></aisl-mav-home>
-<aisl-endline-home *ngIf="!activeScreen && tabs.selectedIndex == 3"></aisl-endline-home>
-<aisl-mockup-home *ngIf="!activeScreen && tabs.selectedIndex == 4"></aisl-mockup-home>
+  <aisl-mav-home *ngIf="selectedIndex == 2"></aisl-mav-home>
+  <aisl-endline-home *ngIf="selectedIndex == 3"></aisl-endline-home>
+  <aisl-mockup-home *ngIf="selectedIndex == 4"></aisl-mockup-home>
+</div>
