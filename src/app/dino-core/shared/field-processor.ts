@@ -3,60 +3,72 @@ import { Observable } from 'rxjs/Observable';
 import { Changes, DatumId, isDatumId } from './changes';
 import { IField } from './field';
 
-type FieldRefs<T> = {
-  [P in keyof T]: IField<T[P]>;
+export type FieldRefs<T> = {
+  [P in keyof T]?: IField<T[P]>;
 };
+
+class MappingResult<T> {
+  constructor(
+    public isComplete: boolean,
+    public result: T
+  ) { }
+}
 
 export class FieldProcessor<T> {
   constructor(
     public stream: Observable<Changes>,
-    public fields: FieldRefs<T>
+    public fields: FieldRefs<T>,
+    public computed: FieldRefs<T> = {}
   ) { }
 
   asObservable(): Observable<Changes<T>> {
     return this.stream.map((changes: Changes): Changes<T> => {
-      return new Changes<T>(
-        this.mapAdd(changes.add),
-        this.mapRemove(changes.remove),
-        this.mapUpdate(changes.update)
-      );
+      const add = this.filterComplete(changes.add.map(
+        (item) => this.mapItem(item))) as T[];
+      const remove = this.filterComplete(changes.remove.map(
+        (item) => this.mapItemOrDatumId(item))) as (T | DatumId)[];
+      const update = changes.update.reduce((result, [key, upd]) => {
+        const {isComplete, result: newKey} = this.mapItemOrDatumId(key);
+        if (isComplete) {
+          const newUpdate = this.mapItem(upd);
+          result.push([newKey, newUpdate]);
+        }
+
+        return result;
+      }, []) as [T | DatumId, Partial<T>][];
+
+      return new Changes<T>(add, remove, update);
     });
   }
 
-  private mapItem(item: any): T {
-    return Object.entries(this.fields).reduce((result: any, [key, field]) => {
-      result[key] = field.get(item);
-      return result;
-    }, {}) as T;
-  }
+  private mapItem(item: any): MappingResult<Partial<T>> {
+    let isComplete = true;
+    const result: Partial<T> = {};
 
-  private mapPartialItem(item: any): Partial<T> {
-    return Object.entries(this.fields).reduce((result: any, [key, field]) => {
-      const value = field.get(item);
-      if (value != null) {
+    function setValue(key: any, value: any): void {
+      if (value == null) {
+        isComplete = false;
+      } else {
         result[key] = value;
       }
+    }
 
-      return result;
-    }, {}) as T;
-  }
-
-  private mapAdd(items: any[]): T[] {
-    return items.map((item) => this.mapItem(item));
-  }
-
-  private mapRemove(items: (DatumId | any)[]): (DatumId | T)[] {
-    return items.map((itemOrId) => {
-      return isDatumId(itemOrId) ? itemOrId : this.mapItem(itemOrId);
+    Object.entries(this.fields).forEach(([key, field]) => {
+      setValue(key, field.get(item));
     });
+
+    Object.entries(this.computed).forEach(([key, field]) => {
+      setValue(key, field.get(result));
+    });
+
+    return new MappingResult(isComplete, result);
   }
 
-  private mapUpdate(items: [DatumId | any, Partial<any>][]): [DatumId | T, Partial<T>][] {
-    return items.map(([key, update]): [DatumId | T, Partial<T>] => {
-      const newKey = isDatumId(key) ? key : this.mapItem(key);
-      const newUpdate = this.mapPartialItem(update);
+  private mapItemOrDatumId(item: any | DatumId): MappingResult<Partial<T> | DatumId> {
+    return isDatumId(item) ? new MappingResult(true, item) : this.mapItem(item);
+  }
 
-      return [newKey, newUpdate];
-    });
+  private filterComplete<U>(items: MappingResult<U>[]): U[] {
+    return items.filter(({isComplete}) => isComplete).map(({result}) => result);
   }
 }
