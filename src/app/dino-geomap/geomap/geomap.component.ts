@@ -33,8 +33,10 @@ export class GeomapComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(element: ElementRef, private dataService: GeomapDataService) {
     this.nativeElement = element.nativeElement;
+  }
 
-    dataService.initializeStates(
+  ngOnChanges(changes) {
+    this.dataService.initializeStates(
       this.stateDataStream, this.stateField,
       this.stateColorField
     ).initializePoints(
@@ -42,9 +44,6 @@ export class GeomapComponent implements OnInit, OnDestroy, OnChanges {
       this.pointLatitudeField,
       this.pointLongitudeField
     );
-  }
-
-  ngOnChanges(changes) {
   }
 
   ngOnInit() {
