@@ -1,12 +1,12 @@
 import * as stateMappingData from './state-mapping.json';
 
 // Tables
-const stateByName = (stateMappingData as []).reduce((result, state) => {
+const stateByName = ((stateMappingData as any) as any[]).reduce((result, state) => {
   result[state.name.toLowerCase()] = state;
   return result;
 }, {});
 
-const stateByAbbr = (stateMappingData as []).reduce((result, state) => {
+const stateByAbbr = ((stateMappingData as any) as any[]).reduce((result, state) => {
   result[state.abbr.toLowerCase()] = state;
   return result;
 }, {});
