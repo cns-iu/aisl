@@ -1,11 +1,14 @@
 import { ElementRef, Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
-import { IField, Changes } from '../../dino-core';
 import { vega, defaultLogLevel } from '../../vega';
+import { IField, Changes } from '../../dino-core';
+import { makeChangeSet } from '../../dino-vega';
+import { State } from '../shared/state';
 import { GeomapDataService } from '../shared/geomap.dataservice';
-import * as us10m from './us-10m.json';
-import * as geomapSpec from './spec.json';
+import * as us10m from '../shared/us-10m.json';
+import * as geomapSpec from '../shared/spec.json';
 
 @Component({
   selector: 'dino-geomap',
@@ -16,6 +19,8 @@ import * as geomapSpec from './spec.json';
 export class GeomapComponent implements OnInit, OnDestroy, OnChanges {
   private nativeElement: any;
   private view: any = null;
+  private statesSubscription: Subscription;
+  private pointSubscription: Subscription;
 
   @Input() stateDataStream: Observable<Changes>;
   @Input() stateField: IField<string>;
@@ -45,7 +50,7 @@ export class GeomapComponent implements OnInit, OnDestroy, OnChanges {
     this.finalizeView();
   }
 
-  renderView(spec: any) {
+  private renderView(spec: any) {
     this.finalizeView(); // Remove any old view
 
     this.view = new vega.View(vega.parse(spec))
@@ -59,9 +64,20 @@ export class GeomapComponent implements OnInit, OnDestroy, OnChanges {
       }))
       // TODO add stateColor and points data
       .run();
+
+    this.statesSubscription = this.dataService.states.subscribe((change: Changes<State>) => {
+      this.view.change('stateColorCoding', makeChangeSet<State>(change, 'id')).run();
+    });
+    console.log(this.view);
   }
 
-  finalizeView() {
+  private finalizeView() {
+    if (this.statesSubscription) {
+      this.statesSubscription.unsubscribe();
+    }
+    if (this.pointSubscription) {
+      this.pointSubscription.unsubscribe();
+    }
     if (this.view) {
       this.view.finalize();
     }

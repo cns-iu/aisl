@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Changes, IField, Field, FieldProcessor } from '../../dino-core';
 import { State } from './state';
+// import { lookupStateCode } from './state-lookup';
 
 // Field defaults
 const defaultStateField = new Field<string>('state', 'State');
@@ -13,12 +14,14 @@ const defaultStateColorField = new Field<string>('color', 'State Color');
 const calculatedStateIdField = new Field<number>(
   'id', 'State ANSI Id',
   (data: Partial<State>): number => {
-    return 0; // TODO lookup
+    return 0; // return data.label ? lookupStateCode(data.label) : 0;
   }
 );
 
 // State name to id lookup
 // TODO
+
+const testChange = new Changes([{state: 'indiana', color: '#0000ff'}]);
 
 @Injectable()
 export class GeomapDataService {
@@ -29,7 +32,7 @@ export class GeomapDataService {
   constructor() {}
 
   initializeStates(
-    stream: Observable<Changes> = Observable.of(),
+    stream: Observable<Changes> = Observable.of(testChange),
     stateField: IField<string> = defaultStateField,
     stateColorField: IField<string> = defaultStateColorField
   ): this {

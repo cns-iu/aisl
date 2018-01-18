@@ -27,7 +27,7 @@
             "id"
           ],
           "values": [
-            "value"
+            "color"
           ],
           "as": [
             "colorValue"
@@ -79,14 +79,14 @@
       },
       "encode": {
         "enter": {
-          "fill": {
-            "field": "colorValue"
-          },
           "stroke": {
             "value": "white"
           }
         },
         "update": {
+          "fill": {
+            "field": "colorValue"
+          },
           "path": {
             "field": "path"
           }
