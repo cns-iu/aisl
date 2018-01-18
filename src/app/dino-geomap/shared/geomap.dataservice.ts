@@ -4,21 +4,34 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Changes, IField, Field, FieldProcessor } from '../../dino-core';
 import { State } from './state';
+import { Point } from './point';
 import { lookupStateCode } from './state-lookup';
 
 // Field defaults
 const defaultStateField = new Field<string>('state', 'State');
 const defaultStateColorField = new Field<string>('color', 'State Coloring');
 
+const defaultPointLatitudeField = new Field<number>('latitude', 'Latitude');
+const defaultPointLongitudeField = new Field<number>('longitude', 'Longitude');
+
 // Computed fields
-const calculatedStateIdField = new Field<number>(
+const computedStateIdField = new Field<number>(
   'id', 'State ANSI Id',
   (data: Partial<State>): number => {
     return data.label ? lookupStateCode(data.label) : 0;
   }
 );
 
-const testChange = new Changes([{state: 'indiana', color: '#0000ff'}]);
+const computedPointIdField = new Field<string>(
+  'id', 'Computed Point Id',
+  (data: Partial<Point>): string => {
+    if (!data.latitude || !data.longitude) {
+      return '';
+    } else {
+      return '' + data.latitude + '+' + data.longitude;
+    }
+  }
+);
 
 @Injectable()
 export class GeomapDataService {
@@ -26,10 +39,14 @@ export class GeomapDataService {
   private statesChange = new BehaviorSubject<Changes<State>>(new Changes<State>());
   states: Observable<Changes<State>> = this.statesChange.asObservable();
 
+  private pointProcessor: FieldProcessor<Point>;
+  private pointsChange = new BehaviorSubject<Changes<Point>>(new Changes<Point>());
+  points: Observable<Changes<Point>> = this.pointsChange.asObservable();
+
   constructor() {}
 
   initializeStates(
-    stream: Observable<Changes> = Observable.of(testChange),
+    stream: Observable<Changes> = Observable.of(),
     stateField: IField<string> = defaultStateField,
     stateColorField: IField<string> = defaultStateColorField
   ): this {
@@ -37,12 +54,30 @@ export class GeomapDataService {
       label: stateField,
       color: stateColorField
     }, {
-      id: calculatedStateIdField
+      id: computedStateIdField
     });
 
-    // XXX Does this need to be stored for later removal?
     this.stateProcessor.asObservable().subscribe((change) => {
       this.statesChange.next(change);
+    });
+
+    return this;
+  }
+
+  initializePoints(
+    stream: Observable<Changes> = Observable.of(),
+    pointLatitudeField: IField<number> = defaultPointLatitudeField,
+    pointLongitudeField: IField<number> = defaultPointLongitudeField
+  ): this {
+    this.pointProcessor = new FieldProcessor<Point>(stream, {
+      latitude: pointLatitudeField,
+      longitude: pointLongitudeField
+    }, {
+      id: computedPointIdField
+    });
+
+    this.pointProcessor.asObservable().subscribe((change) => {
+      this.pointsChange.next(change);
     });
 
     return this;

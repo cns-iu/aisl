@@ -6,6 +6,7 @@ import { vega, defaultLogLevel } from '../../vega';
 import { IField, Changes } from '../../dino-core';
 import { makeChangeSet } from '../../dino-vega';
 import { State } from '../shared/state';
+import { Point } from '../shared/point';
 import { GeomapDataService } from '../shared/geomap.dataservice';
 import * as us10m from '../shared/us-10m.json';
 import * as geomapSpec from '../shared/spec.json';
@@ -36,6 +37,10 @@ export class GeomapComponent implements OnInit, OnDestroy, OnChanges {
     dataService.initializeStates(
       this.stateDataStream, this.stateField,
       this.stateColorField
+    ).initializePoints(
+      this.pointDataStream,
+      this.pointLatitudeField,
+      this.pointLongitudeField
     );
   }
 
@@ -61,14 +66,15 @@ export class GeomapComponent implements OnInit, OnDestroy, OnChanges {
       .insert('states', vega.read(us10m, {
         type: 'topojson',
         feature: 'states'
-      }))
-      // TODO add stateColor and points data
-      .run();
+      })).run();
 
     this.statesSubscription = this.dataService.states.subscribe((change: Changes<State>) => {
       this.view.change('stateColorCoding', makeChangeSet<State>(change, 'id')).run();
     });
-    console.log(this.view);
+
+    this.pointSubscription = this.dataService.points.subscribe((change: Changes<Point>) => {
+      this.view.change('points', makeChangeSet<Point>(change, 'id')).run();
+    });
   }
 
   private finalizeView() {
