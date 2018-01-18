@@ -4,6 +4,11 @@ interface NodeModule {
   id: string;
 }
 
+declare module '*.json' {
+    const value: any;
+    export default value;
+}
+
 // FIXME: casual-browserify needs to be updated to change the line below on their repo.
 declare module "casual-browserify" {
 

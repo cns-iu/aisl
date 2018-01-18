@@ -121,13 +121,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      ["dino", "mav", "aisl"],
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      ["dino", "mav", "aisl"],
       "kebab-case"
     ],
     "no-output-on-prefix": true,
