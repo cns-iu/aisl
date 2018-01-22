@@ -1,6 +1,8 @@
 export interface IField<T> {
   name: string;
   label: string;
+  datatype?: string;
+  kind?: string;
 
   get(item: any): T;
 }

@@ -1,12 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Field } from '../../mav/shared/field';
-import { DataMassagerService } from '../shared/data-massager.service';
 
 @Component({
   selector: 'mav-scatterplot',
   templateUrl: './scatterplot.component.html',
-  styleUrls: ['./scatterplot.component.sass'],
-  providers: [DataMassagerService]
+  styleUrls: ['./scatterplot.component.sass']
 })
 
 export class ScatterplotComponent implements OnInit {
@@ -18,25 +16,24 @@ export class ScatterplotComponent implements OnInit {
   xAttributeSelected: Field = null;
   yAttributeSelected: Field = null;
 
-  constructor(public massager: DataMassagerService) { }
+  constructor() { }
 
   xfieldDropped(event) {
-    this.xAttributeSelected = event;
-    if (this.checkValidity()) {
-      this.massager.setAtMassager(this.xAttributeSelected, 'x', this.rawstream);
+    if (this.checkValidity(event)) {
+      this.xAttributeSelected = event;
     }
   }
 
   yfieldDropped(event) {
-    this.yAttributeSelected = event;
-    if (this.checkValidity()) {
-      this.massager.setAtMassager(this.yAttributeSelected, 'y', this.rawstream);
+    if (this.checkValidity(event)) {
+      this.yAttributeSelected = event;
     }
   }
 
-  checkValidity() {
+  checkValidity(event) {
     return true;
   }
+
   ngOnInit() {
   }
 

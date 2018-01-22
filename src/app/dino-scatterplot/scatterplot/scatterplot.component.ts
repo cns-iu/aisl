@@ -13,6 +13,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Changes } from '../../dino-core';
+import { ScatterplotDataService } from '../shared/scatterplot-data.service';
 import * as d3Axis from 'd3-axis';
 import * as d3Selection from 'd3-selection';
 import 'd3-transition'; // This adds transition support to d3-selection
@@ -23,13 +24,14 @@ import { Field } from '../../mav/shared/field';
 @Component({
   selector: 'dino-scatterplot',
   templateUrl: './scatterplot.component.html',
-  styleUrls: ['./scatterplot.component.sass']
+  styleUrls: ['./scatterplot.component.sass'],
+  providers: [ScatterplotDataService]
 })
-export class ScatterplotComponent implements OnInit {
+export class ScatterplotComponent implements OnInit, OnChanges {
 
   @Input() xFieldSelected: Field;
   @Input() yFieldSelected: Field;
-  @Input() stream: Observable<Changes>;
+  @Input() rawstream: Observable<any>;
   @Input() margin = { top: 20, right: 15, bottom: 60, left: 60 };
   @Input() svgWidth: number = window.innerWidth - this.margin.left - this.margin.right - 300; // initializing width for map container
   @Input() svgHeight: number = window.innerHeight - this.margin.top - this.margin.bottom - 200; // initializing height for map container
@@ -50,26 +52,28 @@ export class ScatterplotComponent implements OnInit {
   xAxis: any; // d3Axis.Axis<any>;
   yAxis: any; // d3Axis.Axis<{}>;
 
-  constructor(element: ElementRef) {
+  constructor(element: ElementRef, public dataService: ScatterplotDataService) {
     this.parentNativeElement = element.nativeElement; // to get native parent element of this component
   }
 
   ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
-      if (propName === 'stream' && this.stream) {
+      if (propName === 'rawstream' && this.rawstream) {
         if (this.streamSubscription) {
           this.streamSubscription.unsubscribe();
         }
-        this.streamSubscription = this.stream.subscribe((data) => {
+        this.streamSubscription = this.dataService.fetchData(this.rawstream).subscribe((data) => {
           this.setScales(data.add);
           this.drawPlots(data.add);
-          // console.log(data.add[0]);
-
         });
       } else if (propName === 'xFieldSelected' && this.xFieldSelected) {
         d3Selection.select('#xAxisLabel').text(this.xFieldSelected['label']); // text label for the x axis
+        this.dataService.xAttribute = this.xFieldSelected;
+        this.dataService.fetchData(this.rawstream);
       } else if (propName === 'yFieldSelected' && this.yFieldSelected) {
         d3Selection.select('#yAxisLabel').text(this.yFieldSelected['label']); // text label for the x axis
+        this.dataService.yAttribute = this.yFieldSelected;
+        this.dataService.fetchData(this.rawstream);
       }
     }
   }
