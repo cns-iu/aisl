@@ -11,7 +11,7 @@ export class Field<T> implements IField<T> {
     public label: string,
     public accessor?: (item: any) => any | T,
     public transform?: (value: any | T) => T
-  ) {}
+  ) { }
 
   get(item: any): T {
     item = item || {};

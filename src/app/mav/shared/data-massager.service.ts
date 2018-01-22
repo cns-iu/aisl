@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { List } from 'immutable';
-import { MessageService } from '../../aisl-backend/shared/message.service';
-import { RaceCompletedMessage } from '../../aisl-backend/shared/aisl-messages';
+// import { MessageService } from '../../aisl-backend/shared/message.service';
+// import { RaceCompletedMessage } from '../../aisl-backend/shared/aisl-messages';
 import { Field } from './field';
 import { Observable } from 'rxjs/Observable';
 import { Changes } from '../../dino-core';
@@ -9,22 +9,21 @@ import { Changes } from '../../dino-core';
 @Injectable()
 export class DataMassagerService {
 
-  raceCompleted: Observable<List<RaceCompletedMessage>>;
+  rawstream: Observable<any>;
   stream: Observable<Changes>;
   xAttribute: Field = { 'label': 'Name', 'type': 'persona', 'property': 'name', 'datatype': 'string', 'kind': 'variable' };
   yAttribute: Field = { 'label': 'Run Time', 'type': 'run', 'property': 'timeMillis', 'datatype': 'number', 'kind': 'variable' };
 
-  constructor(private messageService: MessageService) {
-    this.raceCompleted = <Observable<List<RaceCompletedMessage>>>messageService
-      .asBoundedList(100, RaceCompletedMessage);
+  constructor() {
   }
 
-  setAtMassager(attribute: Field, axis: string) {
+  setAtMassager(attribute: Field, axis: string, rstream: Observable<any>) {
     if (axis === 'x') {
       this.xAttribute = attribute;
     } else if (axis === 'y') {
       this.yAttribute = attribute;
     }
+    this.rawstream = rstream;
     this.fetchData();
   }
 
@@ -34,7 +33,7 @@ export class DataMassagerService {
     const xAttrType = this.xAttribute.type;
     const yAttrType = this.yAttribute.type;
 
-    this.stream = this.raceCompleted.map((msg) => {
+    this.stream = this.rawstream.map((msg) => {
       const msgArray = msg.toArray();
       return new Changes(msg.reduce((result, message) => {
         message.results.forEach((d) => {

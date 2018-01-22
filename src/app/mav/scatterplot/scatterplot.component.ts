@@ -23,14 +23,14 @@ export class ScatterplotComponent implements OnInit {
   xfieldDropped(event) {
     this.xAttributeSelected = event;
     if (this.checkValidity()) {
-      this.massager.setAtMassager(this.xAttributeSelected, 'x');
+      this.massager.setAtMassager(this.xAttributeSelected, 'x', this.rawstream);
     }
   }
 
   yfieldDropped(event) {
     this.yAttributeSelected = event;
     if (this.checkValidity()) {
-      this.massager.setAtMassager(this.yAttributeSelected, 'y');
+      this.massager.setAtMassager(this.yAttributeSelected, 'y', this.rawstream);
     }
   }
 
