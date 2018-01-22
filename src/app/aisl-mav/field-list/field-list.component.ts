@@ -17,7 +17,6 @@ export class FieldListComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource.data = this.fields;
-    console.log(this.fields);
   }
 
 }

@@ -1,1 +1,1 @@
-export {AislMavModule} from './aisl-mav.module';
+export { AislMavModule } from './aisl-mav.module';

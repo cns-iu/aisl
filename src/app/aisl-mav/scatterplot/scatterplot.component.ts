@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AislMavDataMassagerService } from '../shared/aisl-mav-data-massager.service';
 import { Field } from '../../mav/shared/field';
+import { AISL_FIELDS } from '../shared/aisl-fields';
 
 @Component({
   selector: 'aisl-scatterplot',
@@ -11,25 +12,19 @@ import { Field } from '../../mav/shared/field';
 
 export class ScatterplotComponent implements OnInit {
 
-  fieldTuple: [Field, Field];
+  permittedXFields: Set<Field>;
+  permittedYFields: Set<Field>;
+  // fieldTuple: [Field, Field];
   // stream: Observable<any[]>;
 
   constructor(public massager: AislMavDataMassagerService) {
-    this.fieldTuple = [
-      { 'label': 'Name', 'type': 'persona', 'property': 'name', 'datatype': 'string', 'kind': 'variable' },
-      { 'label': 'Run Time', 'type': 'run', 'property': 'timeMillis', 'datatype': 'number', 'kind': 'variable' }
-    ];
-  }
-  setXAttribute(xAttr) {
-    console.log(xAttr);
-    this.fieldTuple[0] = xAttr;
-    this.massager.setAtMassager(this.fieldTuple);
-  }
-
-  setYAttribute(yAttr) {
-    console.log(yAttr);
-    this.fieldTuple[1] = yAttr;
-    this.massager.setAtMassager(this.fieldTuple);
+    // this.fieldTuple = [
+    //   { 'label': 'Name', 'type': 'persona', 'property': 'name', 'datatype': 'string', 'kind': 'variable' },
+    //   { 'label': 'Run Time', 'type': 'run', 'property': 'timeMillis', 'datatype': 'number', 'kind': 'variable' }
+    // ];
+    this.permittedXFields = new Set(AISL_FIELDS);
+    this.permittedYFields = new Set(AISL_FIELDS);
+    console.log(this.permittedXFields);
   }
 
   ngOnInit() { }
