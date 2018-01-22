@@ -6,7 +6,7 @@ import { Field } from '../../mav/shared/field';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
-export class AislMavDataMassagerService {
+export class AislMavDataProviderService {
   raceCompleted: Observable<List<RaceCompletedMessage>>;
 
   constructor(private messageService: MessageService) {
