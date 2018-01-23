@@ -1,14 +1,18 @@
-<dino-scatterplot [xField]="xField" [yField]="yField" [dataStream]="dataStream">
+<dino-scatterplot [xField]="xField"
+                  [yField]="yField"
+                  [dataStream]="dataStream">
 </dino-scatterplot>
 
 Attributes Selected -
 <hr>
-<div [mavDropTarget] (mavDrop)="xfieldDropped($event)">
+<div [mavDropTarget]
+     (mavDrop)="xfieldDropped($event)">
   X-Axis: {{ this.xField?.label }}
   <br>
 </div>
 <hr>
-<div [mavDropTarget] (mavDrop)="yfieldDropped($event)">
+<div [mavDropTarget]
+     (mavDrop)="yfieldDropped($event)">
   Y-Axis: {{ this.yField?.label }}
 </div>
 

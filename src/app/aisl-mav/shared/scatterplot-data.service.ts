@@ -5,7 +5,7 @@ import { RaceCompletedMessage } from '../../aisl-backend/shared/aisl-messages';
 import { IField, Field, Changes } from '../../dino-core';
 import { Observable } from 'rxjs/Observable';
 
-export const scatterPlotFields: IField<any>[] = [
+const scatterPlotFields: IField<any>[] = [
   new Field<string>('name', 'Name', (item: any): string => {
     return item.persona.name;
   }),
@@ -16,9 +16,13 @@ export const scatterPlotFields: IField<any>[] = [
 
 @Injectable()
 export class ScatterPlotDataService {
+  xFields: IField<any>[];
+  yFields: IField<any>[];
   dataStream: Observable<Changes<any>>;
 
   constructor(private messageService: MessageService) {
+    this.xFields = scatterPlotFields;
+    this.yFields = scatterPlotFields;
     this.dataStream = <Observable<Changes<any>>>messageService
       .asBoundedList(5, RaceCompletedMessage).map((messages) => {
         return new Changes(messages.reduce((result, message) => {

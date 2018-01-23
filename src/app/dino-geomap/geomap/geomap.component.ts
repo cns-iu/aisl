@@ -32,17 +32,16 @@ export class GeomapComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(element: ElementRef, private dataService: GeomapDataService) {
     this.nativeElement = element.nativeElement;
-
-    dataService.initializeStates(
-      this.stateDataStream, this.stateField,
-      this.stateColorField
-    );
   }
 
   ngOnChanges(changes) {
   }
 
   ngOnInit() {
+    this.dataService.initializeStates(
+      this.stateDataStream, this.stateField,
+      this.stateColorField
+    );
     this.renderView(geomapSpec);
   }
 

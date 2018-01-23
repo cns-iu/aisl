@@ -6,19 +6,12 @@ import { Changes, IField, Field, FieldProcessor } from '../../dino-core';
 import { State } from './state';
 import { lookupStateCode } from './state-lookup';
 
-// Field defaults
-const defaultStateField = new Field<string>('state', 'State');
-const defaultStateColorField = new Field<string>('color', 'State Coloring');
-
-// Computed fields
+const testChange = new Changes([{ state: 'indiana', color: '#0000ff' }]);
 const calculatedStateIdField = new Field<number>(
   'id', 'State ANSI Id',
   (data: Partial<State>): number => {
     return data.label ? lookupStateCode(data.label) : 0;
-  }
-);
-
-const testChange = new Changes([{state: 'indiana', color: '#0000ff'}]);
+  });
 
 @Injectable()
 export class GeomapDataService {
@@ -26,19 +19,19 @@ export class GeomapDataService {
   private statesChange = new BehaviorSubject<Changes<State>>(new Changes<State>());
   states: Observable<Changes<State>> = this.statesChange.asObservable();
 
-  constructor() {}
+  constructor() { }
 
   initializeStates(
-    stream: Observable<Changes> = Observable.of(testChange),
-    stateField: IField<string> = defaultStateField,
-    stateColorField: IField<string> = defaultStateColorField
+    stateDataStream: Observable<Changes> = Observable.of(testChange),
+    stateField: IField<string>,
+    stateColorField: IField<string>
   ): this {
-    this.stateProcessor = new FieldProcessor<State>(stream, {
+    this.stateProcessor = new FieldProcessor<State>(stateDataStream, {
       label: stateField,
       color: stateColorField
     }, {
-      id: calculatedStateIdField
-    });
+        id: calculatedStateIdField
+      });
 
     // XXX Does this need to be stored for later removal?
     this.stateProcessor.asObservable().subscribe((change) => {

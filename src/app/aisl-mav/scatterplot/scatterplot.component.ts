@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { ScatterPlotDataService, scatterPlotFields } from '../shared/scatterplot-data.service';
+import { ScatterPlotDataService } from '../shared/scatterplot-data.service';
 import { IField, Field, Changes } from '../../dino-core';
 
 @Component({
@@ -11,14 +11,17 @@ import { IField, Field, Changes } from '../../dino-core';
   providers: [ScatterPlotDataService]
 })
 export class ScatterplotComponent implements OnInit {
-  xFields: IField<any>[] = scatterPlotFields;
-  yFields: IField<any>[] = scatterPlotFields;
+  xFields: IField<any>[];
+  yFields: IField<any>[];
   dataStream: Observable<Changes<any>>;
 
-  xField: IField<any> = scatterPlotFields[1];
-  yField: IField<any> = scatterPlotFields[1];
-
+  xField: IField<any>;
+  yField: IField<any>;
   constructor(public massager: ScatterPlotDataService) {
+    this.xFields = massager.xFields;
+    this.yFields = massager.yFields;
+    this.xField = massager.xFields[1];
+    this.yField = massager.yFields[1];
     this.dataStream = massager.dataStream;
   }
 

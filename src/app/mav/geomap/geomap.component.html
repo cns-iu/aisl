@@ -1,2 +1,7 @@
-<dino-geomap>
+<dino-geomap [stateField]="stateField"
+             [stateColorField]="stateColorField"
+             [stateDataStream]="stateDataStream"
+             [pointDataStream]="pointDataStream"
+             [mavDropTarget]
+             (mavDrop)="stateFieldDropped($event)">
 </dino-geomap>
