@@ -1,40 +1,36 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Field } from '../../mav/shared/field';
+import { Observable } from 'rxjs/Observable';
+
+import { IField, Changes } from '../../dino-core';
 
 @Component({
   selector: 'mav-scatterplot',
   templateUrl: './scatterplot.component.html',
   styleUrls: ['./scatterplot.component.sass']
 })
-
 export class ScatterplotComponent implements OnInit {
+  @Input() xFields: IField<any>[];
+  @Input() yFields: IField<any>[];
+  @Input() dataStream: Observable<Changes<any>>;
 
-  @Input() xFields: Set<Field>;
-  @Input() yFields: Set<Field>;
-  @Input() rawstream: any;
-
-  xAttributeSelected: Field = null;
-  yAttributeSelected: Field = null;
+  @Input() xField: IField<any>;
+  @Input() yField: IField<any>;
 
   constructor() { }
 
-  xfieldDropped(event) {
-    if (this.checkValidity(event)) {
-      this.xAttributeSelected = event;
+  ngOnInit() { }
+
+  xfieldDropped(field: any) {
+    const matches = this.xFields.filter((f) => JSON.stringify(f) === JSON.stringify(field));
+    if (matches.length > 0) {
+      this.xField = matches[0];
     }
   }
 
-  yfieldDropped(event) {
-    if (this.checkValidity(event)) {
-      this.yAttributeSelected = event;
+  yfieldDropped(field: any) {
+    const matches = this.yFields.filter((f) => JSON.stringify(f) === JSON.stringify(field));
+    if (matches.length > 0) {
+      this.yField = matches[0];
     }
   }
-
-  checkValidity(event) {
-    return true;
-  }
-
-  ngOnInit() {
-  }
-
 }

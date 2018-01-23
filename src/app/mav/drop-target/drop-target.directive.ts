@@ -1,4 +1,5 @@
-import { Output,
+import {
+  Output,
   EventEmitter,
   Input,
   HostListener,
@@ -38,8 +39,7 @@ export class DropTargetDirective {
 
   @HostListener('drop', ['$event'])
   onDrop(event) {
-    const data =  JSON.parse(event.dataTransfer.getData('Object'));
-    // console.log(data);
+    const data = JSON.parse(event.dataTransfer.getData('Object'));
     this.drop.next(data);
   }
 }

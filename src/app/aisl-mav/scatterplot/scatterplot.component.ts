@@ -1,22 +1,25 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AislMavDataProviderService } from '../shared/aisl-mav-data-provider.service';
-import { Field } from '../../mav/shared/field';
-import { AISL_FIELDS } from '../shared/aisl-fields';
+import { Observable } from 'rxjs/Observable';
+
+import { ScatterPlotDataService, scatterPlotFields } from '../shared/scatterplot-data.service';
+import { IField, Field, Changes } from '../../dino-core';
 
 @Component({
   selector: 'aisl-scatterplot',
   templateUrl: './scatterplot.component.html',
   styleUrls: ['./scatterplot.component.sass'],
-  providers: [AislMavDataProviderService]
+  providers: [ScatterPlotDataService]
 })
-
 export class ScatterplotComponent implements OnInit {
-  permittedXFields: Set<Field>;
-  permittedYFields: Set<Field>;
+  xFields: IField<any>[] = scatterPlotFields;
+  yFields: IField<any>[] = scatterPlotFields;
+  dataStream: Observable<Changes<any>>;
 
-  constructor(public massager: AislMavDataProviderService) {
-    this.permittedXFields = new Set(AISL_FIELDS);
-    this.permittedYFields = new Set(AISL_FIELDS);
+  xField: IField<any> = scatterPlotFields[1];
+  yField: IField<any> = scatterPlotFields[1];
+
+  constructor(public massager: ScatterPlotDataService) {
+    this.dataStream = massager.dataStream;
   }
 
   ngOnInit() { }

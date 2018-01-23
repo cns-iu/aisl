@@ -1,38 +1,34 @@
 import { Injectable, Input } from '@angular/core';
-import { Field } from '../../mav/shared/field';
 import { Observable } from 'rxjs/Observable';
-import { Changes } from '../../dino-core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subscription } from 'rxjs/Subscription';
+
+import { Changes, IField, Field, FieldProcessor } from '../../dino-core';
+import { Point } from './point';
 
 @Injectable()
 export class ScatterplotDataService {
+  private pointProcessor: FieldProcessor<Point>;
+  private pointsChange = new BehaviorSubject<Changes<Point>>(new Changes<Point>());
+  points: Observable<Changes<Point>> = this.pointsChange.asObservable();
 
-  xAttribute: Field = { 'label': 'Name', 'type': 'persona', 'property': 'name', 'datatype': 'string', 'kind': 'variable' };
-  yAttribute: Field = { 'label': 'Run Time', 'type': 'run', 'property': 'timeMillis', 'datatype': 'number', 'kind': 'variable' };
+  private streamSubscription: Subscription;
 
   constructor() { }
 
-  fetchData(rawstream: Observable<any>): Observable<Changes> {
-    const xAttrName = this.xAttribute.property;
-    const yAttrName = this.yAttribute.property;
-    const xAttrType = this.xAttribute.type;
-    const yAttrType = this.yAttribute.type;
-
-    const stream = rawstream.map((msg) => {
-      const msgArray = msg.toArray();
-      return new Changes(msg.reduce((result, message) => {
-        message.results.forEach((d) => {
-          const obj = {
-            'persona': d.persona,
-            'avatar': msgArray[0].avatar
-          };
-          obj['persona'][yAttrType] = d[yAttrName] / 1000;
-          obj['persona'][xAttrType] = Math.random() * 4;
-          result.push(obj);
-        });
-        return result;
-      }, []));
-
+  fetchData(stream: Observable<Changes<any>>, xField: IField<number | string>, yField: IField<number | string>): this {
+    this.pointProcessor = new FieldProcessor<Point>(stream, {
+      x: xField,
+      y: yField
     });
-    return stream;
+
+    if (this.streamSubscription) {
+      this.streamSubscription.unsubscribe();
+    }
+
+    this.streamSubscription = this.pointProcessor.asObservable().subscribe((change) => {
+      this.pointsChange.next(change);
+    });
+    return this;
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Field } from '../../mav/shared/field';
+import { IField } from '../../dino-core';
 import { AISL_FIELDS } from '../shared/aisl-fields';
 
 @Component({
@@ -9,7 +9,7 @@ import { AISL_FIELDS } from '../shared/aisl-fields';
   styleUrls: ['./home.component.sass']
 })
 export class HomeComponent implements OnInit {
-  fields: Field[] = AISL_FIELDS;
+  fields: IField<any>[] = AISL_FIELDS;
 
   constructor() { }
 

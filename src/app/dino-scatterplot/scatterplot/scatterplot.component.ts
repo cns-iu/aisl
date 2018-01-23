@@ -8,18 +8,18 @@ import {
   SimpleChanges,
   EventEmitter
 } from '@angular/core';
-
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Changes } from '../../dino-core';
-import { ScatterplotDataService } from '../shared/scatterplot-data.service';
 import * as d3Axis from 'd3-axis';
 import * as d3Selection from 'd3-selection';
 import 'd3-transition'; // This adds transition support to d3-selection
 import * as d3Array from 'd3-array';
 import { scaleLinear, scaleOrdinal, scalePow, scaleTime } from 'd3-scale';
-import { Field } from '../../mav/shared/field';
+
+import { Changes, IField } from '../../dino-core';
+import { ScatterplotDataService } from '../shared/scatterplot-data.service';
+import { Point } from '../shared/point';
 
 @Component({
   selector: 'dino-scatterplot',
@@ -28,10 +28,10 @@ import { Field } from '../../mav/shared/field';
   providers: [ScatterplotDataService]
 })
 export class ScatterplotComponent implements OnInit, OnChanges {
+  @Input() xField: IField<number | string>;
+  @Input() yField: IField<number | string>;
+  @Input() dataStream: Observable<Changes<any>>;
 
-  @Input() xFieldSelected: Field;
-  @Input() yFieldSelected: Field;
-  @Input() rawstream: Observable<any>;
   @Input() margin = { top: 20, right: 15, bottom: 60, left: 60 };
   @Input() svgWidth: number = window.innerWidth - this.margin.left - this.margin.right - 300; // initializing width for map container
   @Input() svgHeight: number = window.innerHeight - this.margin.top - this.margin.bottom - 200; // initializing height for map container
@@ -56,25 +56,42 @@ export class ScatterplotComponent implements OnInit, OnChanges {
     this.parentNativeElement = element.nativeElement; // to get native parent element of this component
   }
 
+  ngOnInit() {
+    this.setScales([]);
+    this.initVisualization();
+    this.updateAxisLabels();
+
+    this.dataService.points.subscribe((data) => {
+      this.setScales(data.add);
+      this.drawPlots(data.add);
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
-      if (propName === 'rawstream' && this.rawstream) {
-        if (this.streamSubscription) {
-          this.streamSubscription.unsubscribe();
-        }
-        this.streamSubscription = this.dataService.fetchData(this.rawstream).subscribe((data) => {
-          this.setScales(data.add);
-          this.drawPlots(data.add);
-        });
-      } else if (propName === 'xFieldSelected' && this.xFieldSelected) {
-        d3Selection.select('#xAxisLabel').text(this.xFieldSelected['label']); // text label for the x axis
-        this.dataService.xAttribute = this.xFieldSelected;
-        this.dataService.fetchData(this.rawstream);
-      } else if (propName === 'yFieldSelected' && this.yFieldSelected) {
-        d3Selection.select('#yAxisLabel').text(this.yFieldSelected['label']); // text label for the x axis
-        this.dataService.yAttribute = this.yFieldSelected;
-        this.dataService.fetchData(this.rawstream);
+      if (propName === 'dataStream' && this.dataStream) {
+        this.updateStreamProcessor();
+      } else if (propName === 'xField' && this.xField) {
+        this.updateStreamProcessor();
+      } else if (propName === 'yField' && this.yField) {
+        this.updateStreamProcessor();
       }
+    }
+  }
+
+  updateStreamProcessor() {
+    if (this.dataStream && this.xField && this.yField) {
+      this.dataService.fetchData(this.dataStream, this.xField, this.yField);
+    }
+    this.updateAxisLabels();
+  }
+
+  updateAxisLabels() {
+    if (this.xField) {
+      d3Selection.select('#xAxisLabel').text(this.xField.label); // text label for the x axis
+    }
+    if (this.yField) {
+      d3Selection.select('#yAxisLabel').text(this.yField.label); // text label for the x axis
     }
   }
 
@@ -131,7 +148,7 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   }
 
   /********* This function draws points on the scatterplot ********/
-  drawPlots(data: any[]) {
+  drawPlots(data: Point[]) {
     const xscale = this.xScale;
     const yscale = this.yScale;
     const plots = this.mainG.selectAll('circle')
@@ -139,12 +156,9 @@ export class ScatterplotComponent implements OnInit, OnChanges {
 
     this.xAxisGroup.transition().call(this.xAxis);  // Update X-Axis
     this.yAxisGroup.transition().call(this.yAxis);  // Update Y-Axis
-    plots.enter().append('circle').attr('cx', (d) => {
-      return xscale(d['persona'][this.xFieldSelected['type']]);
-    })
-      .attr('cy', (d) => {
-        return yscale(d['persona'][this.yFieldSelected['type']]);
-      })
+    plots.enter().append('circle')
+      .attr('cx', (d) => xscale(d.x))
+      .attr('cy', (d) => yscale(d.y))
       .attr('r', 10)
       .attr('fill', 'red')
       .transition().duration(5000).attr('fill', 'black').attr('r', 8);
@@ -153,17 +167,14 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   }
 
   /**** This function sets scales on x and y axes based on fields selected *****/
-  setScales(data: any[]) {
+  setScales(data: Point[]) {
     switch (this.xtype) {
       default:
       case 'number':
         if (!this.xScale) {
           this.xScale = scaleLinear();
         }
-        this.xScale.domain([0, d3Array.max(data, (d) => {
-          console.log('setScales', this.xFieldSelected, d);
-          return d['persona'][this.xFieldSelected['type']];
-        })])
+        this.xScale.domain([0, d3Array.max(data, (d) => <number>d.x)])
           .range([0, this.svgWidth]);
         break;
 
@@ -177,20 +188,12 @@ export class ScatterplotComponent implements OnInit, OnChanges {
         if (!this.yScale) {
           this.yScale = scaleLinear();
         }
-        this.yScale.domain([0, d3Array.max(data, (d) => {
-          return d['persona'][this.yFieldSelected['type']];
-        })]).range([this.svgHeight, 0]);
+        this.yScale.domain([0, d3Array.max(data, (d) => <number>d.y)])
+          .range([this.svgHeight, 0]);
         break;
 
       case 'string':  // blah
         break;
     }
   }
-
-  ngOnInit() {
-    this.setScales([]);
-    this.initVisualization();
-  }
-
-
 }
