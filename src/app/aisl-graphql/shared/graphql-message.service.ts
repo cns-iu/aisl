@@ -86,7 +86,8 @@ export class GraphQLMessageService {
 
   listenForRunSelected() {
     this.runSelected = this.apollo.subscribe({ query: RUN_SELECTED }).map((data) => {
-      return new RunSelectedMessage(data.data.runSelected)
+      data.data.runSelected.timestamp = new Date(data.data.runSelected.timestamp);
+      return new RunSelectedMessage(data.data.runSelected);
     });
     this.runSelected.subscribe({
       next: (message) => { this.messageService.send(message); },
@@ -95,7 +96,8 @@ export class GraphQLMessageService {
   }
   listenForRaceInitiated() {
     this.raceInitiated = this.apollo.subscribe({ query: RACE_INITIATED }).map((data) => {
-      return new RaceInitiatedMessage(data.data.raceInitiated)
+      data.data.raceInitiated.timestamp = new Date(data.data.raceInitiated.timestamp);
+      return new RaceInitiatedMessage(data.data.raceInitiated);
     });
     this.raceInitiated.subscribe({
       next: (message) => { this.messageService.send(message); },
@@ -104,7 +106,8 @@ export class GraphQLMessageService {
   }
   listenForRaceCompleted() {
     this.raceCompleted = this.apollo.subscribe({ query: RACE_COMPLETED }).map((data) => {
-      return new RaceCompletedMessage(data.data.raceCompleted)
+      data.data.raceCompleted.timestamp = new Date(data.data.raceCompleted.timestamp);
+      return new RaceCompletedMessage(data.data.raceCompleted);
     });
     this.raceCompleted.subscribe({
       next: (message) => { this.messageService.send(message); },

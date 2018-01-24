@@ -14,7 +14,7 @@ type RunRecord {
   avatar: ID!
   persona: ID!
 
-  timestamp: Date
+  timestamp: Int
   lane: Int
   started: Boolean
   falseStart: Boolean

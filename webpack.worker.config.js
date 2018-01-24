@@ -11,7 +11,6 @@ module.exports = {
       ".js"
     ],
     "modules": [
-      "./node_modules",
       "./node_modules"
     ]
   },

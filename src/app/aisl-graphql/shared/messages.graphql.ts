@@ -1,18 +1,18 @@
 export const MessagesSchema = `
 interface Message {
   type: String
-  timestamp: Date
+  timestamp: String
 }
 
 type RunSelectedMessage implements Message {
   type: String
-  timestamp: Date
+  timestamp: String
   avatar: Avatar
 }
 
 type RaceInitiatedMessage implements Message {
   type: String
-  timestamp: Date
+  timestamp: String
   avatar: Avatar
 }
 
@@ -26,7 +26,7 @@ type RaceResult {
 
 type RaceCompletedMessage implements Message {
   type: String
-  timestamp: Date
+  timestamp: String
   avatar: Avatar
   results: [RaceResult]!
 }

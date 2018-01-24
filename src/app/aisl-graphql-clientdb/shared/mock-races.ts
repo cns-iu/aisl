@@ -12,6 +12,8 @@ export class MockRaces {
   }
 
   send(message: Message) {
+    (<any>message)['timestamp'] = message.timestamp.toUTCString();
+
     switch (message.type) {
       case 'run-selected':
         pubsub.publish(message.type, { runSelected: message });
