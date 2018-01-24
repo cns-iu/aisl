@@ -1,27 +1,24 @@
-import { Injectable } from '@angular/core';
-export { Persona } from './database/types/persona';
-import { Avatar } from './database/types/avatar';
-import { Persona } from './database/types/persona';
-import { Message } from './message';
-import { RunSelectedMessage, RaceInitiatedMessage, RaceCompletedMessage, RaceResult } from '../shared/aisl-messages';
+import {
+  Persona, Avatar, Message, RunSelectedMessage,
+  RaceInitiatedMessage, RaceCompletedMessage, RaceResult
+} from '../../aisl-backend/shared/models';
 
-import { MessageService } from './message.service';
+import { MockAvatar } from './avatar.mock';
+import { MockPersona } from './persona.mock';
 
-import { MockAvatar } from './database/mocks/avatar.mock';
-import { MockPersona } from './database/mocks/persona.mock';
+import { randomInt, randomBool } from './random';
 
-import { randomInt, randomBool, randFromList } from './database-utils';
+export class RaceMocker {
+  private _mocking = false;
 
-@Injectable()
-export class MockMessageService extends MessageService {
-
-  constructor() {
-    super();
+  constructor(private messageService: { send: (message: Message) => void }) {
     this.startMocking();
-    console.log(this);
   }
 
-  private _mocking = false;
+  send(message: Message) {
+    this.messageService.send(message);
+  }
+
   get mocking(): boolean {
     return this._mocking;
   }
@@ -38,8 +35,8 @@ export class MockMessageService extends MessageService {
 
   protected mockRace() {
     const runSelectedTime = randomInt(2000, 7000),
-    raceInitiatedTime = randomInt(4000, 7000),
-    raceCompletedTime = randomInt(2000, 10000);
+      raceInitiatedTime = randomInt(4000, 7000),
+      raceCompletedTime = randomInt(2000, 10000);
 
     setTimeout(() => {
       const runSelectedMessage = this.runSelected();
@@ -82,7 +79,7 @@ export class MockMessageService extends MessageService {
     return message;
   }
   raceResults(time: number, lane: number): RaceResult {
-    return <RaceResult> {
+    return <RaceResult>{
       lane,
       persona: MockPersona(),
       started: randomBool(),

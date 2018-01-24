@@ -12,7 +12,7 @@ export interface Run {
   timeMillis: number;
 }
 
-export interface RxRunType {
+export interface FlatRun {
   avatar: string;
   persona: string;
   timestamp: number; // UTC Milliseconds

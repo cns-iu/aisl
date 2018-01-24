@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import * as RxDBTypes from './database/types/rxdb-types.d';
+import RxDB from 'rxdb';
+import { RxDocument } from 'rxdb';
 
 import * as LocalStorageAdapter from 'pouchdb-adapter-localstorage';
 import * as WebSQLAdapter from 'pouchdb-adapter-websql';
@@ -7,28 +8,21 @@ import * as IdbAdapter from 'pouchdb-adapter-idb';
 import * as MemoryAdapter from 'pouchdb-adapter-memory';
 import * as HttpAdapter from 'pouchdb-adapter-http';
 
-import { AvatarSchema } from './database/schemas/avatar.schema';
-import { PersonaSchema } from './database/schemas/persona.schema';
-import { RunSchema } from './database/schemas/run.schema';
+import { RxAislDatabase } from './rxdb-types.d';
 
-import { Avatar } from "./database/types/avatar";
-import { Persona } from "./database/types/persona";
-import { Run, RxRunType } from "./database/types/run";
+import { AvatarSchema } from './avatar.schema';
+import { PersonaSchema } from './persona.schema';
+import { RunSchema } from './run.schema';
 
-// batteries-included
-import RxDB from 'rxdb';
-import { RxDocument } from 'rxdb';
+import { Avatar, Persona, Run, FlatRun } from '../../aisl-backend';
 
-/**
- * custom build
- */
-// import RxDB from 'rxdb/plugins/core';
+import { environment } from '../../shared';
 
-// import modules
+/** Setup RxDB Plugins **/
 import RxDBSchemaCheckModule from 'rxdb/plugins/schema-check';
-if (true) { //ENV === 'development') {
-    // schema-checks should be used in dev-mode only
-    RxDB.plugin(RxDBSchemaCheckModule);
+if (!environment.production) {
+  // schema-checks should be used in dev-mode only
+  RxDB.plugin(RxDBSchemaCheckModule);
 }
 
 import RxDBValidateModule from 'rxdb/plugins/validate';
@@ -42,21 +36,33 @@ RxDB.plugin(RxDBReplicationModule);
 // always needed for replication with the node-server
 RxDB.plugin(HttpAdapter);
 
-
-RxDB.QueryChangeDetector.enable();
-RxDB.QueryChangeDetector.enableDebugging();
-
 const adapters = {
-    localstorage: LocalStorageAdapter,
-    websql: WebSQLAdapter,
-    idb: IdbAdapter,
-    memory: MemoryAdapter
+  localstorage: LocalStorageAdapter,
+  websql: WebSQLAdapter,
+  idb: IdbAdapter,
+  memory: MemoryAdapter
 };
 
 const useAdapter = 'idb';
 RxDB.plugin(adapters[useAdapter]);
 
-async function RxRunTypeAsRun(rxRun: RxDocument<RxRunType>): Promise<Run> {
+RxDB.QueryChangeDetector.enable();
+
+if (!environment.production) {
+  RxDB.QueryChangeDetector.enableDebugging();
+}
+
+/** END Setup RxDB Plugins **/
+
+
+
+// Disable sync with remote pouchdb
+// console.log('hostname: ' + window.location.hostname);
+const syncURL = 'http://' + window.location.hostname + ':10101/';
+// const doSync = window.location.hash !== '#nosync';
+const doSync = false;
+
+async function FlatRunAsRun(rxRun: RxDocument<FlatRun>): Promise<Run> {
   const avatar: Avatar = await rxRun.populate('avatar');
   const persona: Persona = await rxRun.populate('persona');
   const timestamp = new Date(rxRun.timestamp);
@@ -67,44 +73,41 @@ async function RxRunTypeAsRun(rxRun: RxDocument<RxRunType>): Promise<Run> {
     started: rxRun.started,
     falseStart: rxRun.falseStart,
     timeMillis: rxRun.timeMillis
-  }
+  };
 }
 
-let collections = [
-    {
-        name: 'avatar',
-        schema: AvatarSchema,
-        sync: false
+const collections = [
+  {
+    name: 'avatar',
+    schema: AvatarSchema,
+    sync: doSync
+  },
+  {
+    name: 'persona',
+    schema: PersonaSchema,
+    sync: doSync
+  },
+  {
+    name: 'run',
+    schema: RunSchema,
+    sync: doSync,
+    methods: {
+      asRun() {
+        return FlatRunAsRun(this);
+      }
     },
-    {
-        name: 'persona',
-        schema: PersonaSchema,
-        sync: false
-    },
-    {
-        name: 'run',
-        schema: RunSchema,
-        sync: false,
-        methods: {
-            asRun() {
-              return RxRunTypeAsRun(this);
-            }
-        },
-    },
+  }
 ];
-
-console.log('hostname: ' + window.location.hostname);
-const syncURL = 'http://' + window.location.hostname + ':10101/';
-
-let doSync = false;
-if (window.location.hash == '#nosync') doSync = false;
 
 @Injectable()
 export class RxdbDatabaseService {
-  static dbPromise: Promise<RxDBTypes.RxAislDatabase> = null;
-  private async _create(): Promise<RxDBTypes.RxAislDatabase> {
+  private dbPromise: Promise<RxAislDatabase> = null;
+
+  collections: any[] = collections;
+
+  private async _create(): Promise<RxAislDatabase> {
     console.log('DatabaseService: creating database..');
-    const db: RxDBTypes.RxAislDatabase = await RxDB.create({
+    const db: RxAislDatabase = await RxDB.create({
       name: 'aisl',
       adapter: useAdapter,
       // password: 'myLongAndStupidPassword' // no password needed
@@ -120,7 +123,7 @@ export class RxdbDatabaseService {
 
     // create collections
     console.log('DatabaseService: create collections');
-    await Promise.all(collections.map(colData => db.collection(colData)));
+    await Promise.all(this.collections.map(colData => db.collection(colData)));
 
     // sync
     console.log('DatabaseService: sync');
@@ -132,13 +135,13 @@ export class RxdbDatabaseService {
     return db;
   }
 
-  get(): Promise<RxDBTypes.RxAislDatabase> {
-    if (RxdbDatabaseService.dbPromise)
-        return RxdbDatabaseService.dbPromise;
+  get(): Promise<RxAislDatabase> {
+    if (this.dbPromise) {
+      return this.dbPromise;
+    }
 
     // create database
-    RxdbDatabaseService.dbPromise = this._create();
-    return RxdbDatabaseService.dbPromise;
+    this.dbPromise = this._create();
+    return this.dbPromise;
   }
-
 }

@@ -4,6 +4,9 @@ import { NgModule } from '@angular/core';
 import { CoreModule } from './core';
 import { SharedModule } from './shared';
 
+import { AislGraphqlModule } from './aisl-graphql';
+import { AislGraphqlClientdbModule } from './aisl-graphql-clientdb';
+
 import { AislBackendModule } from './aisl-backend';
 import { AislEndlineModule } from './aisl-endline';
 import { AislMavModule } from './aisl-mav';
@@ -19,7 +22,9 @@ import { AppComponent } from './app.component';
     BrowserModule,
     CoreModule,
     SharedModule,
+    AislGraphqlClientdbModule,
     AislBackendModule,
+    AislGraphqlModule,
     AislEndlineModule,
     AislMavModule,
     MavMockupModule

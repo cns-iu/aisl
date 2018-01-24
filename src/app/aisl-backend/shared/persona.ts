@@ -8,4 +8,6 @@ export interface Persona {
   handedness: 'left' | 'right';
   zipcode: string;
   state: string;
+  latitude: number;
+  longitude: number;
 }
