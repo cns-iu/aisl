@@ -44355,7 +44355,7 @@ var PersonaSchema = "\nenum GENDER {\n  male\n  female\n  other\n}\n\nenum HANDE
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RunSchema; });
-var RunSchema = "\ntype Run {\n  avatar: Avatar!\n  persona: Persona!\n\n  timestamp: Int\n  lane: Int\n  started: Boolean\n  falseStart: Boolean\n  timeMillis: Int\n}\n\ntype RunRecord {\n  avatar: ID!\n  persona: ID!\n\n  timestamp: Int\n  lane: Int\n  started: Boolean\n  falseStart: Boolean\n  timeMillis: Int\n\n  asRun: Run\n}\n";
+var RunSchema = "\ntype Run {\n  avatar: Avatar!\n  persona: Persona!\n\n  timestamp: String\n  lane: Int\n  started: Boolean\n  falseStart: Boolean\n  timeMillis: Int\n}\n\ntype RunRecord {\n  avatar: ID!\n  persona: ID!\n\n  timestamp: String\n  lane: Int\n  started: Boolean\n  falseStart: Boolean\n  timeMillis: Int\n\n  asRun: Run\n}\n";
 //# sourceMappingURL=run.graphql.js.map
 
 /***/ }),

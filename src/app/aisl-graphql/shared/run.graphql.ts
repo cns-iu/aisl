@@ -3,7 +3,7 @@ type Run {
   avatar: Avatar!
   persona: Persona!
 
-  timestamp: Int
+  timestamp: String
   lane: Int
   started: Boolean
   falseStart: Boolean
@@ -14,7 +14,7 @@ type RunRecord {
   avatar: ID!
   persona: ID!
 
-  timestamp: Int
+  timestamp: String
   lane: Int
   started: Boolean
   falseStart: Boolean
