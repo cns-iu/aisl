@@ -85,7 +85,6 @@ export class GraphQLMessageService {
       next: (data) => {
         const message = new RunSelectedMessage(data.data.runSelected);
         this.messageService.send(message);
-        console.log(data);
       },
       error(err: any): void { console.log('err', err); }
     });
@@ -95,7 +94,6 @@ export class GraphQLMessageService {
       next: (data) => {
         const message = new RaceInitiatedMessage(data.data.raceInitiated);
         this.messageService.send(message);
-        console.log(data);
       },
       error(err: any): void { console.log('err', err); }
     });
@@ -105,7 +103,6 @@ export class GraphQLMessageService {
       next: (data) => {
         const message = new RaceCompletedMessage(data.data.raceCompleted);
         this.messageService.send(message);
-        console.log(data);
       },
       error(err: any): void { console.log('err', err); }
     });
