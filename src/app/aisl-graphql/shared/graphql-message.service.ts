@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
@@ -73,6 +74,9 @@ const RACE_COMPLETED = gql`
 
 @Injectable()
 export class GraphQLMessageService {
+  runSelected: Observable<RunSelectedMessage>;
+  raceInitiated: Observable<RaceInitiatedMessage>;
+  raceCompleted: Observable<RaceCompletedMessage>;
 
   constructor(private messageService: MessageService, private apollo: Apollo) {
     this.listenForRunSelected();
@@ -81,29 +85,29 @@ export class GraphQLMessageService {
   }
 
   listenForRunSelected() {
-    this.apollo.subscribe({ query: RUN_SELECTED }).subscribe({
-      next: (data) => {
-        const message = new RunSelectedMessage(data.data.runSelected);
-        this.messageService.send(message);
-      },
+    this.runSelected = this.apollo.subscribe({ query: RUN_SELECTED }).map((data) => {
+      return new RunSelectedMessage(data.data.runSelected)
+    });
+    this.runSelected.subscribe({
+      next: (message) => { this.messageService.send(message); },
       error(err: any): void { console.log('err', err); }
     });
   }
   listenForRaceInitiated() {
-    this.apollo.subscribe({ query: RACE_INITIATED }).subscribe({
-      next: (data) => {
-        const message = new RaceInitiatedMessage(data.data.raceInitiated);
-        this.messageService.send(message);
-      },
+    this.raceInitiated = this.apollo.subscribe({ query: RACE_INITIATED }).map((data) => {
+      return new RaceInitiatedMessage(data.data.raceInitiated)
+    });
+    this.raceInitiated.subscribe({
+      next: (message) => { this.messageService.send(message); },
       error(err: any): void { console.log('err', err); }
     });
   }
   listenForRaceCompleted() {
-    this.apollo.subscribe({ query: RACE_COMPLETED }).subscribe({
-      next: (data) => {
-        const message = new RaceCompletedMessage(data.data.raceCompleted);
-        this.messageService.send(message);
-      },
+    this.raceCompleted = this.apollo.subscribe({ query: RACE_COMPLETED }).map((data) => {
+      return new RaceCompletedMessage(data.data.raceCompleted)
+    });
+    this.raceCompleted.subscribe({
+      next: (message) => { this.messageService.send(message); },
       error(err: any): void { console.log('err', err); }
     });
   }
