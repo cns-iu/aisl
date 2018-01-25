@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
+import * as moment from 'moment';
+
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 
@@ -86,30 +88,29 @@ export class GraphQLMessageService {
 
   listenForRunSelected() {
     this.runSelected = this.apollo.subscribe({ query: RUN_SELECTED }).map((data) => {
-      data.data.runSelected.timestamp = new Date(data.data.runSelected.timestamp);
-      return new RunSelectedMessage(data.data.runSelected);
+      return new RunSelectedMessage(this.convertTimestamp(data.data.runSelected));
     });
-    this.runSelected.subscribe({
-      next: (message) => { this.messageService.send(message); },
-      error(err: any): void { console.log('err', err); }
-    });
+    this.listenForMessage(this.runSelected);
   }
   listenForRaceInitiated() {
     this.raceInitiated = this.apollo.subscribe({ query: RACE_INITIATED }).map((data) => {
-      data.data.raceInitiated.timestamp = new Date(data.data.raceInitiated.timestamp);
-      return new RaceInitiatedMessage(data.data.raceInitiated);
+      return new RaceInitiatedMessage(this.convertTimestamp(data.data.raceInitiated));
     });
-    this.raceInitiated.subscribe({
-      next: (message) => { this.messageService.send(message); },
-      error(err: any): void { console.log('err', err); }
-    });
+    this.listenForMessage(this.raceInitiated);
   }
   listenForRaceCompleted() {
     this.raceCompleted = this.apollo.subscribe({ query: RACE_COMPLETED }).map((data) => {
-      data.data.raceCompleted.timestamp = new Date(data.data.raceCompleted.timestamp);
-      return new RaceCompletedMessage(data.data.raceCompleted);
+      return new RaceCompletedMessage(this.convertTimestamp(data.data.raceCompleted));
     });
-    this.raceCompleted.subscribe({
+    this.listenForMessage(this.raceCompleted);
+  }
+
+  private convertTimestamp(message: any): any {
+    message.timestamp = moment(message.timestamp).local().toDate();
+    return message;
+  }
+  private listenForMessage(observable: Observable<Message>) {
+    observable.subscribe({
       next: (message) => { this.messageService.send(message); },
       error(err: any): void { console.log('err', err); }
     });

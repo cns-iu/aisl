@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 import { Message } from '../../aisl-backend/shared/models';
 import { RaceMocker } from '../../aisl-graphql-mockdb/shared/race-mocker';
 
@@ -12,17 +14,19 @@ export class MockRaces {
   }
 
   send(message: Message) {
-    (<any>message)['timestamp'] = message.timestamp.toUTCString();
+    const outgoingMessage: any = Object.assign({}, message, {
+      timestamp: moment(message.timestamp).format() // GraphQL timestamp is a String
+    });
 
     switch (message.type) {
       case 'run-selected':
-        pubsub.publish(message.type, { runSelected: message });
+        pubsub.publish(message.type, { runSelected: outgoingMessage });
         break;
       case 'race-initiated':
-        pubsub.publish(message.type, { raceInitiated: message });
+        pubsub.publish(message.type, { raceInitiated: outgoingMessage });
         break;
       case 'race-completed':
-        pubsub.publish(message.type, { raceCompleted: message });
+        pubsub.publish(message.type, { raceCompleted: outgoingMessage });
         break;
     }
   }
