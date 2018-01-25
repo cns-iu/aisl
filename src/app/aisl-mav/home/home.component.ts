@@ -1,19 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { IField } from '../../dino-core';
-import { AISL_FIELDS } from '../shared/aisl-fields';
+import { aislScatterplotFields, aislGeomapFields } from '../shared/aisl-fields';
 
 @Component({
   selector: 'aisl-mav-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.sass']
 })
+
 export class HomeComponent implements OnInit {
-  fields: IField<any>[] = AISL_FIELDS;
+  @Input() fields = aislScatterplotFields;
 
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
+  setFields(index: number) {
+    if (index === 0) {
+      this.fields = aislScatterplotFields;
+    } else if (index === 1) {
+      this.fields = aislGeomapFields;
+    }
+  }
 }
