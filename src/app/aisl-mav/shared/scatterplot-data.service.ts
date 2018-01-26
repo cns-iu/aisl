@@ -6,11 +6,14 @@ import { IField, Field, Changes } from '../../dino-core';
 import { Observable } from 'rxjs/Observable';
 
 const fields: IField<any>[] = [
-  new Field<string>('name', 'Name', (item: any): string => {
-    return item.persona.name;
-  }),
-  new Field<number>('timeMillis', 'Run Time', (item: any): number => {
+  // new Field<string>('name', 'Person Name', (item: any): string => {
+  //   return item.persona.name;
+  // }),
+  new Field<number>('timeMillis', 'Person Run Time', (item: any): number => {
     return item.timeMillis;
+  }, (value: number) => value / 1000.0),
+  new Field<number>('timeMillis', 'Avatar Run Time', (item: any): number => {
+    return item.avatar.runMillis;
   }, (value: number) => value / 1000.0)
 ];
 
@@ -25,7 +28,7 @@ export class ScatterPlotDataService {
     this.xFields = fields;
     this.yFields = fields;
     this.dataStream = <Observable<Changes<any>>>messageService
-      .asBoundedList(5, RaceCompletedMessage).map((messages) => {
+      .asBoundedList(1, RaceCompletedMessage).map((messages) => {
         return new Changes(messages.reduce((result, message) => {
           const raceMessage = <RaceCompletedMessage>message;
           raceMessage.results.forEach((race) => {
@@ -33,7 +36,7 @@ export class ScatterPlotDataService {
             result.push(race);
           });
           return result;
-        }, []).slice(0, 5));
+        }, []));
       });
   }
 }

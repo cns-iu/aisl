@@ -20,7 +20,7 @@ export class ScatterplotComponent implements OnInit {
   constructor(public massager: ScatterPlotDataService) {
     this.xFields = massager.xFields;
     this.yFields = massager.yFields;
-    this.xField = massager.xFields[1];
+    this.xField = massager.xFields[0];
     this.yField = massager.yFields[1];
     this.dataStream = massager.dataStream;
   }

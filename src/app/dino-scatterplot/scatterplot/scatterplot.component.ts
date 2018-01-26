@@ -47,10 +47,9 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   yScale: any; // d3Axis.AxisScale<any>
   xAxisLabel = 'x-axis'; // defaults
   yAxisLabel = 'y-axis'; // defaults
-  xtype = 'number'; // defaults
-  ytype = 'number'; // defaults
   xAxis: any; // d3Axis.Axis<any>;
   yAxis: any; // d3Axis.Axis<{}>;
+  data: Point[] = [];
 
   constructor(element: ElementRef, public dataService: ScatterplotDataService) {
     this.parentNativeElement = element.nativeElement; // to get native parent element of this component
@@ -62,10 +61,12 @@ export class ScatterplotComponent implements OnInit, OnChanges {
     this.updateAxisLabels();
 
     this.dataService.points.subscribe((data) => {
-      this.setScales(data.add);
-      this.drawPlots(data.add);
+      this.data = this.data.concat(data.add);
+      this.setScales(this.data);
+      this.drawPlots(this.data);
     });
   }
+
 
   ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
@@ -80,6 +81,7 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   }
 
   updateStreamProcessor() {
+    this.data = [];
     if (this.dataStream && this.xField && this.yField) {
       this.dataService.fetchData(this.dataStream, this.xField, this.yField);
     }
@@ -151,23 +153,29 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   drawPlots(data: Point[]) {
     const xscale = this.xScale;
     const yscale = this.yScale;
+
     const plots = this.mainG.selectAll('circle')
       .data(data);
+
+    plots.transition().duration(500).attr('cx', (d) => xscale(d.x))
+      .attr('cy', (d) => yscale(d.y));
 
     plots.enter().append('circle')
       .attr('cx', (d) => xscale(d.x))
       .attr('cy', (d) => yscale(d.y))
-      .attr('r', 10)
+      .attr('r', 12)
       .attr('fill', 'red')
-      .transition().duration(5000).attr('fill', 'black').attr('r', 8);
+      .transition().duration(1000).attr('fill', 'black').attr('r', 8);
 
     this.xAxisGroup.transition().call(this.xAxis);  // Update X-Axis
     this.yAxisGroup.transition().call(this.yAxis);  // Update Y-Axis
+
+    plots.exit().remove();
   }
 
   /**** This function sets scales on x and y axes based on fields selected *****/
   setScales(data: Point[]) {
-    switch (this.xtype) {
+    switch (this.xField.datatype) {
       default:
       case 'number':
         if (!this.xScale) {
@@ -186,7 +194,7 @@ export class ScatterplotComponent implements OnInit, OnChanges {
         break;
     }
 
-    switch (this.ytype) {
+    switch (this.yField.datatype) {
       default:
       case 'number':
         if (!this.yScale) {
