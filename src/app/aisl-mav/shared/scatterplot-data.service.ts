@@ -22,8 +22,8 @@ export class ScatterPlotDataService {
   dataStream: Observable<Changes<any>>;
 
   constructor(private messageService: MessageService) {
-    this.xFields = fields.slice(0, 1);
-    this.yFields = fields.slice(1, 2);
+    this.xFields = fields;
+    this.yFields = fields;
     this.dataStream = <Observable<Changes<any>>>messageService
       .asBoundedList(5, RaceCompletedMessage).map((messages) => {
         return new Changes(messages.reduce((result, message) => {

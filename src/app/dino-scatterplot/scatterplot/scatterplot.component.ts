@@ -47,8 +47,8 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   yScale: any; // d3Axis.AxisScale<any>
   xAxisLabel = 'x-axis'; // defaults
   yAxisLabel = 'y-axis'; // defaults
-  xtype = 'string'; // defaults
-  ytype = 'string'; // defaults
+  xtype = 'number'; // defaults
+  ytype = 'number'; // defaults
   xAxis: any; // d3Axis.Axis<any>;
   yAxis: any; // d3Axis.Axis<{}>;
 
