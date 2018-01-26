@@ -3,22 +3,13 @@
                   [dataStream]="dataStream">
 </dino-scatterplot>
 
-Attributes Selected -
-<hr>
-<div [mavDropTarget]
-     (mavDrop)="xfieldDropped($event)">
-  X-Axis: {{ this.xField?.label }}
-  <br>
-</div>
-<hr>
-<div [mavDropTarget]
-     (mavDrop)="yfieldDropped($event)">
-  Y-Axis: {{ this.yField?.label }}
-</div>
-
-<!--
-<mav-drop-targets>
-  <mav-drop-target label="X-Axis" [fields]="xFields" [(field)]="xField" />
-  <mav-drop-target label="Y-Axis" [fields]="yFields" [(field)]="yField" />
-</mav-drop-targets>
--->
+<mav-field-dropzones>
+  <mav-field-dropzone label="X-Axis"
+                      [fields]="xFields"
+                      [(field)]="xField">
+  </mav-field-dropzone>
+  <mav-field-dropzone label="Y-Axis"
+                      [fields]="yFields"
+                      [(field)]="yField">
+  </mav-field-dropzone>
+</mav-field-dropzones>

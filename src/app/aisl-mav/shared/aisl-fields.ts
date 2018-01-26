@@ -6,11 +6,21 @@
 
 import { IField, Field } from '../../dino-core';
 
-export const AISL_FIELDS: IField<any>[] = [
+export const aislScatterplotFields: IField<any>[] = [
   new Field<string>('name', 'Name', (item: any): string => {
     return item.persona.name;
   }),
   new Field<number>('timeMillis', 'Run Time', (item: any): number => {
-    return item.persona.timeMillis;
+    return item.timeMillis;
   }, (value: number) => value / 1000.0)
+];
+
+
+export const aislGeomapFields: IField<any>[] = [
+  new Field<string>('state', 'State', (item: any): string => {
+    return item.persona.state;
+  }),
+  new Field<string>('color', 'State Coloring', (item: any): string => {
+    return item.persona.color;
+  })
 ];

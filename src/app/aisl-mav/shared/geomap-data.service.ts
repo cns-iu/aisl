@@ -4,15 +4,7 @@ import { MessageService } from '../../aisl-backend/shared/message.service';
 import { RaceCompletedMessage } from '../../aisl-backend/shared/aisl-messages';
 import { IField, Field, Changes } from '../../dino-core';
 import { Observable } from 'rxjs/Observable';
-
-const geomapFields: IField<any>[] = [
-  new Field<string>('state', 'State', (item: any): string => {
-    return item.persona.state;
-  }),
-  new Field<string>('color', 'State Coloring', (item: any): string => {
-    return item.persona.color;
-  })
-];
+import { aislGeomapFields } from './aisl-fields';
 
 @Injectable()
 export class GeomapDataService {
@@ -23,8 +15,8 @@ export class GeomapDataService {
   pointDataStream: Observable<Changes<any>>;
 
   constructor(private messageService: MessageService) {
-    this.stateFields = geomapFields;
-    this.stateColorFields = geomapFields;
+    this.stateFields = aislGeomapFields;
+    this.stateColorFields = aislGeomapFields;
     this.stateDataStream = <Observable<Changes<any>>>messageService
       .asBoundedList(5, RaceCompletedMessage).map((messages) => {
         return new Changes(messages.reduce((result, message) => {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 
 import { IField } from '../../dino-core';
@@ -8,7 +8,7 @@ import { IField } from '../../dino-core';
   templateUrl: './field-list.component.html',
   styleUrls: ['./field-list.component.sass']
 })
-export class FieldListComponent implements OnInit {
+export class FieldListComponent implements OnInit, OnChanges {
   @Input() fields: IField<any>[];
 
   dataSource: MatTableDataSource<IField<any>> = new MatTableDataSource();
@@ -16,6 +16,10 @@ export class FieldListComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.dataSource.data = this.fields;
+  }
+
+  ngOnChanges(changes: any) {
     this.dataSource.data = this.fields;
   }
 
