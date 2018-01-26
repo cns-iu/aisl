@@ -1,10 +1,19 @@
 import { createWorker, handleSubscriptions } from 'apollo-link-webworker';
 
 import { MockRaces } from './shared/mock-races';
+import { RxdbDatabaseService } from './shared/rxdb-database.service';
 
 import { schema } from './shared/schema';
-import { context } from './shared/context';
+import { RxDBGraphQLContext } from './shared/context';
 import { pubsub } from './shared/subscriptions';
+
+const context = new RxDBGraphQLContext(null);
+
+const db = new RxdbDatabaseService();
+db.get().then((database) => {
+  context.db = database;
+});
+const racer = new MockRaces();
 
 createWorker({
   schema,
@@ -18,5 +27,3 @@ self.onmessage = message => handleSubscriptions({
   context,
   pubsub,
 });
-
-const racer = new MockRaces();

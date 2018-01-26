@@ -15,5 +15,6 @@ export class AislGraphqlMockdbModule {
   constructor(private mockMessageService: MockMessageService) {
     // Injecting the mock message service when the Module is imported.
     // The mock message service will then start mocking immediately.
+    mockMessageService.startMocking();
   }
 }

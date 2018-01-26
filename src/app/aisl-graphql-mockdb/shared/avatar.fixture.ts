@@ -1,4 +1,4 @@
-import { Avatar } from '../../aisl-backend';
+import { Avatar } from '../../aisl-backend/shared/models';
 
 export const AvatarFixtures: Avatar[] = [
   { 'id': 'dinosaur', 'name': 'Dinosaur!', 'runMillis': 5000 },

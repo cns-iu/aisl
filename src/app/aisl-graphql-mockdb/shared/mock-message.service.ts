@@ -10,8 +10,6 @@ export class MockMessageService {
 
   constructor(private messageService: MessageService) {
     this.mocker = new RaceMocker(messageService);
-    this.startMocking();
-    console.log(this.mocker);
   }
 
   get mocking(): boolean {

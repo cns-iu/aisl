@@ -13,11 +13,11 @@ export const resolvers: any = {
     raceCompleted: {
       subscribe: () => pubsub.asyncIterator('race-completed')
     },
-    newRaceCompletedRecords: {
-      subscribe: () => pubsub.asyncIterator('new-race-completed-records')
+    runCompletedRecords: {
+      subscribe: () => pubsub.asyncIterator('run-completed-records')
     },
-    newRaceCompleted: {
-      subscribe: () => pubsub.asyncIterator('new-race-completed')
+    runCompleted: {
+      subscribe: () => pubsub.asyncIterator('run-completed')
     },
   }
 };

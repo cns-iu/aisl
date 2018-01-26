@@ -31,4 +31,26 @@ type RaceCompletedMessage implements Message {
   results: [RaceResult]!
 }
 
+type AnyMessage implements Message {
+  type: String!
+  timestamp: String!
+  avatar: Avatar
+  results: [RaceResult]
+}
+
+input NewRaceResult {
+  lane: Int
+  persona: NewPersona
+  started: Boolean
+  falseStart: Boolean
+  timeMillis: Int
+}
+
+input NewAnyMessage {
+  type: String!
+  timestamp: String!
+  avatar: NewAvatar
+  results: [NewRaceResult]
+}
+
 `;

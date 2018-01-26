@@ -22,4 +22,15 @@ type RunRecord {
 
   asRun: Run
 }
+
+input NewRunRecord {
+  avatar: ID!
+  persona: ID!
+
+  timestamp: String
+  lane: Int
+  started: Boolean
+  falseStart: Boolean
+  timeMillis: Int
+}
 `;

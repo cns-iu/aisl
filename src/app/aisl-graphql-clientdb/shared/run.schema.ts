@@ -3,7 +3,6 @@ export const RunSchema: any = {
   'description': 'describes an individual instance of a run for a persona vs an avatar',
   'version': 0,
   'disableKeyCompression': true,
-  'type': 'object',
   'properties': {
     'avatar': {
       'ref': 'avatar',

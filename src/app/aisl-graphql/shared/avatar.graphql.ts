@@ -4,4 +4,9 @@ type Avatar {
   name: String
   runMillis: Int
 }
+
+input NewAvatar {
+  name: String
+  runMillis: Int
+}
 `;

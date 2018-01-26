@@ -13,18 +13,32 @@ ${MessagesSchema}
 
 type Query {
   avatar(id: ID): Avatar
+  avatars(limit: Int = 20): [Avatar!]!
+  persona(id: ID): Persona
+  personas(limit: Int = 20): [Persona!]!
+
+  runRecords(lastX: Int): [RunRecord!]!
+  runs(lastX: Int): [RunRecord!]!
+
+  messages(lastX: Int): AnyMessage
 }
 
 type Mutation {
-  avatar(id: ID): Avatar
+  registerAvatar(avatar: NewAvatar): ID
+  registerPersona(persona: NewPersona): ID
+  raceCompleted(runs: [NewRunRecord!]!): [ID!]!
+
+  sendMessage(message: NewAnyMessage): Boolean
 }
 
 type Subscription {
+  messageStream: AnyMessage
+
   runSelected: RunSelectedMessage
   raceInitiated: RaceInitiatedMessage
   raceCompleted: RaceCompletedMessage
-  newRaceCompletedRecords: [RunRecord]!
-  newRaceCompleted: [Run]!
+  runCompletedRecords: [RunRecord]!
+  runCompleted: [Run]!
 }
 
 schema {

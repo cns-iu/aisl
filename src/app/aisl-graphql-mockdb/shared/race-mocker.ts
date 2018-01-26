@@ -11,9 +11,7 @@ import { randomInt, randomBool } from './random';
 export class RaceMocker {
   private _mocking = false;
 
-  constructor(private messageService: { send: (message: Message) => void }) {
-    this.startMocking();
-  }
+  constructor(private messageService: { send: (message: Message) => void }) {}
 
   send(message: Message) {
     this.messageService.send(message);

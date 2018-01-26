@@ -3,7 +3,6 @@ export const AvatarSchema: any = {
   'description': 'describes an avatar a user races against',
   'version': 0,
   'disableKeyCompression': true,
-  'type': 'object',
   'properties': {
     'id': {
       'type': 'string',

@@ -1,2 +1,5 @@
+import { RxAislDatabase } from './rxdb-types';
 
-export const context: any = {};
+export class RxDBGraphQLContext {
+  constructor(public db: RxAislDatabase) {}
+}

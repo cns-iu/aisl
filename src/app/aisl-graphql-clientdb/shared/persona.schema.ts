@@ -3,7 +3,6 @@ export const PersonaSchema: any = {
   'description': 'describes a persona who is the runner',
   'version': 0,
   'disableKeyCompression': true,
-  'type': 'object',
   'properties': {
     'id': {
       'type': 'string',
