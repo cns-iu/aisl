@@ -35,6 +35,5 @@ export class ScatterPlotDataService {
           return result;
         }, []).slice(0, 5));
       });
-    console.log(this.dataStream);
   }
 }

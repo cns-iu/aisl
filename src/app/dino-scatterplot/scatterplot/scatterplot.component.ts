@@ -154,14 +154,12 @@ export class ScatterplotComponent implements OnInit, OnChanges {
     const plots = this.mainG.selectAll('circle')
       .data(data);
 
-
     plots.enter().append('circle')
       .attr('cx', (d) => xscale(d.x))
       .attr('cy', (d) => yscale(d.y))
       .attr('r', 10)
       .attr('fill', 'red')
       .transition().duration(5000).attr('fill', 'black').attr('r', 8);
-
 
     this.xAxisGroup.transition().call(this.xAxis);  // Update X-Axis
     this.yAxisGroup.transition().call(this.yAxis);  // Update Y-Axis
