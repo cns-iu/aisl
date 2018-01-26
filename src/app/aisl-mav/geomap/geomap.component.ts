@@ -13,6 +13,7 @@ import { IField, Field, Changes } from '../../dino-core';
 export class GeomapComponent implements OnInit {
   stateFields: IField<any>[];
   stateColorFields: IField<any>[];
+  fields: IField<any>[];
   stateDataStream: Observable<Changes<any>>;
   pointDataStream: Observable<Changes<any>>;
   stateField: IField<any>;
@@ -21,9 +22,8 @@ export class GeomapComponent implements OnInit {
   constructor(public massager: GeomapDataService) {
     this.stateFields = massager.stateFields;
     this.stateColorFields = massager.stateColorFields;
-    this.stateField = massager.stateFields[0];
-    this.stateColorField = massager.stateColorFields[1];
-
+    this.stateField = this.stateFields[0];
+    this.stateColorField = this.stateColorFields[1];
     this.stateDataStream = massager.stateDataStream;
     this.pointDataStream = massager.pointDataStream;
   }

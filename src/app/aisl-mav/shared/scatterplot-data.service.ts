@@ -4,17 +4,26 @@ import { MessageService } from '../../aisl-backend/shared/message.service';
 import { RaceCompletedMessage } from '../../aisl-backend/shared/aisl-messages';
 import { IField, Field, Changes } from '../../dino-core';
 import { Observable } from 'rxjs/Observable';
-import { aislScatterplotFields } from './aisl-fields';
+
+const fields: IField<any>[] = [
+  new Field<string>('name', 'Name', (item: any): string => {
+    return item.persona.name;
+  }),
+  new Field<number>('timeMillis', 'Run Time', (item: any): number => {
+    return item.timeMillis;
+  }, (value: number) => value / 1000.0)
+];
 
 @Injectable()
 export class ScatterPlotDataService {
   xFields: IField<any>[];
   yFields: IField<any>[];
+  fields = fields;
   dataStream: Observable<Changes<any>>;
 
   constructor(private messageService: MessageService) {
-    this.xFields = aislScatterplotFields;
-    this.yFields = aislScatterplotFields;
+    this.xFields = fields.slice(0, 1);
+    this.yFields = fields.slice(1, 2);
     this.dataStream = <Observable<Changes<any>>>messageService
       .asBoundedList(5, RaceCompletedMessage).map((messages) => {
         return new Changes(messages.reduce((result, message) => {
@@ -24,7 +33,8 @@ export class ScatterPlotDataService {
             result.push(race);
           });
           return result;
-        }, []));
+        }, []).slice(0, 5));
       });
+    console.log(this.dataStream);
   }
 }

@@ -15,7 +15,7 @@ import * as d3Axis from 'd3-axis';
 import * as d3Selection from 'd3-selection';
 import 'd3-transition'; // This adds transition support to d3-selection
 import * as d3Array from 'd3-array';
-import { scaleLinear, scaleOrdinal, scalePow, scaleTime } from 'd3-scale';
+import { scaleLinear, scaleOrdinal, scalePow, scaleTime, scalePoint } from 'd3-scale';
 
 import { Changes, IField } from '../../dino-core';
 import { ScatterplotDataService } from '../shared/scatterplot-data.service';
@@ -47,8 +47,8 @@ export class ScatterplotComponent implements OnInit, OnChanges {
   yScale: any; // d3Axis.AxisScale<any>
   xAxisLabel = 'x-axis'; // defaults
   yAxisLabel = 'y-axis'; // defaults
-  xtype = 'number'; // defaults
-  ytype = 'number'; // defaults
+  xtype = 'string'; // defaults
+  ytype = 'string'; // defaults
   xAxis: any; // d3Axis.Axis<any>;
   yAxis: any; // d3Axis.Axis<{}>;
 
@@ -154,8 +154,7 @@ export class ScatterplotComponent implements OnInit, OnChanges {
     const plots = this.mainG.selectAll('circle')
       .data(data);
 
-    this.xAxisGroup.transition().call(this.xAxis);  // Update X-Axis
-    this.yAxisGroup.transition().call(this.yAxis);  // Update Y-Axis
+
     plots.enter().append('circle')
       .attr('cx', (d) => xscale(d.x))
       .attr('cy', (d) => yscale(d.y))
@@ -163,7 +162,9 @@ export class ScatterplotComponent implements OnInit, OnChanges {
       .attr('fill', 'red')
       .transition().duration(5000).attr('fill', 'black').attr('r', 8);
 
-    plots.exit().remove();
+
+    this.xAxisGroup.transition().call(this.xAxis);  // Update X-Axis
+    this.yAxisGroup.transition().call(this.yAxis);  // Update Y-Axis
   }
 
   /**** This function sets scales on x and y axes based on fields selected *****/
@@ -178,7 +179,12 @@ export class ScatterplotComponent implements OnInit, OnChanges {
           .range([0, this.svgWidth]);
         break;
 
-      case 'string': // blah;
+      case 'string':
+        if (!this.xScale) {
+          this.xScale = scalePoint();
+        }
+        this.xScale.domain(data.map(el => el.x))
+          .range([0, this.svgWidth]);
         break;
     }
 
@@ -192,7 +198,12 @@ export class ScatterplotComponent implements OnInit, OnChanges {
           .range([this.svgHeight, 0]);
         break;
 
-      case 'string':  // blah
+      case 'string':
+        if (!this.yScale) {
+          this.yScale = scalePoint();
+        }
+        this.yScale.domain(data.map(el => el.y))
+          .range([this.svgHeight, 0]);
         break;
     }
   }

@@ -20,17 +20,5 @@ export class GeomapComponent implements OnInit {
 
   ngOnInit() { }
 
-  stateFieldDropped(field: any) {
-    const matches = this.stateFields.filter((f) => JSON.stringify(f) === JSON.stringify(field));
-    if (matches.length > 0) {
-      this.stateField = matches[0];
-    }
-  }
 
-  stateColorFieldDropped(field: any) {
-    const matches = this.stateColorFields.filter((f) => JSON.stringify(f) === JSON.stringify(field));
-    if (matches.length > 0) {
-      this.stateColorField = matches[0];
-    }
-  }
 }

@@ -1,7 +1,16 @@
 <dino-geomap [stateField]="stateField"
              [stateColorField]="stateColorField"
              [stateDataStream]="stateDataStream"
-             [pointDataStream]="pointDataStream"
-             [mavDropTarget]
-             (mavDrop)="stateFieldDropped($event)">
+             [pointDataStream]="pointDataStream">
 </dino-geomap>
+
+<mav-field-dropzones>
+  <mav-field-dropzone label="State Field"
+                      [fields]="stateFields"
+                      [(field)]="stateField">
+  </mav-field-dropzone>
+  <mav-field-dropzone label="State Color Field"
+                      [fields]="stateColorFields"
+                      [(field)]="stateColorField">
+  </mav-field-dropzone>
+</mav-field-dropzones>

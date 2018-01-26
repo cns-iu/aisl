@@ -1,4 +1,4 @@
-import { ElementRef, Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
+import { ElementRef, Component, Input, SimpleChanges, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -17,36 +17,49 @@ import * as geomapSpec from '../shared/spec.json';
   providers: [GeomapDataService]
 })
 export class GeomapComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() stateField: IField<string>;
+  @Input() stateColorField: IField<string>;
+  @Input() stateDataStream: Observable<Changes>;
+  @Input() pointDataStream: Observable<Changes>;
+  @Input() pointLatitudeField: IField<number>;
+  @Input() pointLongitudeField: IField<number>;
+
   private nativeElement: any;
   private view: any = null;
   private statesSubscription: Subscription;
   private pointSubscription: Subscription;
 
-  @Input() stateDataStream: Observable<Changes>;
-  @Input() stateField: IField<string>;
-  @Input() stateColorField: IField<string>;
-
-  @Input() pointDataStream: Observable<Changes>;
-  @Input() pointLatitudeField: IField<number>;
-  @Input() pointLongitudeField: IField<number>;
-
   constructor(element: ElementRef, private dataService: GeomapDataService) {
     this.nativeElement = element.nativeElement;
   }
 
-  ngOnChanges(changes) {
+  ngOnInit() {
+    this.updateStreamProcessor();
   }
 
-  ngOnInit() {
-    this.dataService.initializeStates(
-      this.stateDataStream, this.stateField,
-      this.stateColorField
-    );
-    this.renderView(geomapSpec);
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (propName === 'stateDataStream' && this.stateDataStream) {
+        this.updateStreamProcessor();
+      } else if (propName === 'stateField' && this.stateField) {
+        this.updateStreamProcessor();
+      } else if (propName === 'stateColorField' && this.stateColorField) {
+        this.updateStreamProcessor();
+      }
+    }
   }
 
   ngOnDestroy() {
     this.finalizeView();
+  }
+
+  updateStreamProcessor() {
+    if (this.stateDataStream && this.stateField && this.stateColorField) {
+      this.dataService.initializeStates(
+        this.stateDataStream, this.stateField, this.stateColorField
+      );
+    }
+    this.renderView(geomapSpec);
   }
 
   private renderView(spec: any) {
@@ -67,7 +80,6 @@ export class GeomapComponent implements OnInit, OnDestroy, OnChanges {
     this.statesSubscription = this.dataService.states.subscribe((change: Changes<State>) => {
       this.view.change('stateColorCoding', makeChangeSet<State>(change, 'id')).run();
     });
-    console.log(this.view);
   }
 
   private finalizeView() {

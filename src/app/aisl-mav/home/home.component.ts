@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { ScatterplotComponent } from '../scatterplot/scatterplot.component';
+import { GeomapComponent } from '../geomap/geomap.component';
 import { IField } from '../../dino-core';
-import { aislScatterplotFields, aislGeomapFields } from '../shared/aisl-fields';
+
 
 @Component({
   selector: 'aisl-mav-home',
@@ -10,17 +11,22 @@ import { aislScatterplotFields, aislGeomapFields } from '../shared/aisl-fields';
 })
 
 export class HomeComponent implements OnInit {
-  @Input() fields = aislScatterplotFields;
+
+  @ViewChild(ScatterplotComponent) scatterplot: ScatterplotComponent;
+  @ViewChild(GeomapComponent) geomap: GeomapComponent;
+  @Input() fields;
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.fields = this.scatterplot.massager.fields;
+  }
 
   setFields(index: number) {
     if (index === 0) {
-      this.fields = aislScatterplotFields;
+      this.fields = this.scatterplot.massager.fields;
     } else if (index === 1) {
-      this.fields = aislGeomapFields;
+      this.fields = this.geomap.massager.fields;
     }
   }
 }
