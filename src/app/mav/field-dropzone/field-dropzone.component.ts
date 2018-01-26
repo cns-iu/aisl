@@ -2,10 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IField } from '../../dino-core';
 @Component({
   selector: 'mav-field-dropzone',
-  templateUrl: './mav-field-dropzone.component.html',
-  styleUrls: ['./mav-field-dropzone.component.sass']
+  templateUrl: './field-dropzone.component.html',
+  styleUrls: ['./field-dropzone.component.sass']
 })
-export class MavFieldDropzoneComponent implements OnInit {
+export class FieldDropzoneComponent implements OnInit {
   @Input() label: String;
   @Input() fields: IField<any>[];
   @Input() field: IField<any>;

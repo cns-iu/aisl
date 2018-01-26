@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MavFieldDropzoneComponent } from './mav-field-dropzone.component';
+import { FieldDropzoneComponent } from './field-dropzone.component';
 
-describe('MavFieldDropzoneComponent', () => {
-  let component: MavFieldDropzoneComponent;
-  let fixture: ComponentFixture<MavFieldDropzoneComponent>;
+describe('FieldDropzoneComponent', () => {
+  let component: FieldDropzoneComponent;
+  let fixture: ComponentFixture<FieldDropzoneComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MavFieldDropzoneComponent ]
+      declarations: [ FieldDropzoneComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MavFieldDropzoneComponent);
+    fixture = TestBed.createComponent(FieldDropzoneComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
