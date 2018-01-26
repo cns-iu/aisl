@@ -32,9 +32,9 @@ export class RaceMocker {
   }
 
   protected mockRace() {
-    const runSelectedTime = randomInt(2000, 7000),
-      raceInitiatedTime = randomInt(4000, 7000),
-      raceCompletedTime = randomInt(2000, 10000);
+    const runSelectedTime = randomInt(100, 500),
+      raceInitiatedTime = randomInt(500, 1500),
+      raceCompletedTime = randomInt(1000, 4000);
 
     setTimeout(() => {
       const runSelectedMessage = this.runSelected();
