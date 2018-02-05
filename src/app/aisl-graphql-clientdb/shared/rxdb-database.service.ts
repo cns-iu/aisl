@@ -27,7 +27,7 @@ if (!environment.production) {
 RxDB.plugin(RxDBValidateModule);
 RxDB.plugin(DBAdapter);
 
-RxDB.QueryChangeDetector.enable();
+RxDB.QueryChangeDetector.enable(true);
 if (!environment.production) {
   RxDB.QueryChangeDetector.enableDebugging();
 }
@@ -104,6 +104,6 @@ export class RxdbDatabaseService {
       await Promise.all(AvatarFixtures.map((avatar) => db.avatar.insert(avatar)));
     }
     const numFixtures = (await db.avatar.find().exec()).length;
-    console.log('Fixtures:',numFixtures);
+    console.log('Fixtures:', numFixtures);
   }
 }

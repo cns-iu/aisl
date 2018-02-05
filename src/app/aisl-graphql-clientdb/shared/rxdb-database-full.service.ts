@@ -47,7 +47,7 @@ const adapters = {
 const useAdapter = 'idb';
 RxDB.plugin(adapters[useAdapter]);
 
-RxDB.QueryChangeDetector.enable();
+RxDB.QueryChangeDetector.enable(true);
 
 if (!environment.production) {
   RxDB.QueryChangeDetector.enableDebugging();
