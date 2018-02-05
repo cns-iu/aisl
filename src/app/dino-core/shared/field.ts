@@ -1,6 +1,8 @@
 export interface IField<T> {
   name: string;
   label: string;
+  datatype?: string;
+  kind?: string;
 
   get(item: any): T;
 }
@@ -11,7 +13,7 @@ export class Field<T> implements IField<T> {
     public label: string,
     public accessor?: (item: any) => any | T,
     public transform?: (value: any | T) => T
-  ) {}
+  ) { }
 
   get(item: any): T {
     item = item || {};

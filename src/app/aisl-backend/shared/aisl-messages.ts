@@ -1,14 +1,14 @@
 import { Message } from './message';
-import { Avatar } from './database/types/avatar';
-import { Persona } from './database/types/persona';
+import { Avatar } from './avatar';
+import { Persona } from './persona';
 
 export class RunSelectedMessage extends Message {
-  type: string = 'run-selected';
+  type = 'run-selected';
   avatar: Avatar;
 }
 
 export class RaceInitiatedMessage extends Message {
-  type: string = 'race-initiated';
+  type = 'race-initiated';
   avatar: Avatar;
 }
 
@@ -21,7 +21,7 @@ export interface RaceResult {
 }
 
 export class RaceCompletedMessage extends Message {
-  type: string = 'race-completed';
+  type = 'race-completed';
   avatar: Avatar;
   results: RaceResult[];
 }

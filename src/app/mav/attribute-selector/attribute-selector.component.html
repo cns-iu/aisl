@@ -1,8 +1,11 @@
-
-<mat-table #table [dataSource]="dataSource">
+<mat-table #table
+           style="width:200px;"
+           [dataSource]="dataSource">
   <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef>Field Names</mat-header-cell>
-    <mat-cell *matCellDef="let field" [mavDraggable]="field" class = "draggable">{{field.label}}</mat-cell>
+    <mat-header-cell *matHeaderCellDef>Fields</mat-header-cell>
+    <mat-cell *matCellDef="let field"
+              [mavDraggable]="field"
+              class="draggable">{{field.label}}</mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="['name']"></mat-header-row>

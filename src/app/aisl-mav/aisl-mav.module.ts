@@ -13,7 +13,7 @@ const components: any[] = [
   HomeComponent,
   ScatterplotComponent,
   FieldListComponent
-]
+];
 
 @NgModule({
   imports: [

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Field } from '../shared/field';
+import { IField } from '../../dino-core';
 
 @Component({
   selector: 'mav-attribute-selector',
@@ -9,10 +9,8 @@ import { Field } from '../shared/field';
 })
 export class AttributeSelectorComponent implements OnInit {
 
-  @Input() dataSource: MatTableDataSource<Field> = new MatTableDataSource();
+  @Input() dataSource: MatTableDataSource<IField<any>> = new MatTableDataSource();
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() { }
 }

@@ -1,14 +1,15 @@
+<dino-scatterplot [xField]="xField"
+                  [yField]="yField"
+                  [dataStream]="dataStream">
+</dino-scatterplot>
 
-<div id="plotContainer">
-</div>
-
-
-Attributes Selected - <hr>
- <div [mavDropTarget] (mavDrop)="xfieldDropped($event)">
-   X-Axis: {{ xAttributeSelected?.label }}
-  <br>
-</div>
-<hr>
-<div [mavDropTarget] (mavDrop)="yfieldDropped($event)">
-  Y-Axis: {{ yAttributeSelected?.label }}
-</div>
+<mav-field-dropzones>
+  <mav-field-dropzone label="X-Axis"
+                      [fields]="xFields"
+                      [(field)]="xField">
+  </mav-field-dropzone>
+  <mav-field-dropzone label="Y-Axis"
+                      [fields]="yFields"
+                      [(field)]="yField">
+  </mav-field-dropzone>
+</mav-field-dropzones>

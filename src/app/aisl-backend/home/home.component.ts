@@ -4,7 +4,6 @@ import { List } from 'immutable';
 
 import { Message } from '../shared/message';
 import { MessageService } from '../shared/message.service';
-import { RxdbDatabaseService } from '../shared/rxdb-database.service';
 
 @Component({
   selector: 'aisl-backend-home',
@@ -16,9 +15,8 @@ export class HomeComponent implements OnInit {
 
   messages: Observable<List<Message>>;
 
-  constructor(private messageService: MessageService, private rxdbDatabaseService: RxdbDatabaseService) {
+  constructor(private messageService: MessageService) {
     this.messages = this.messageService.asBoundedList(this.historySize);
-    rxdbDatabaseService.get().then((x) => console.log(x));
   }
 
   ngOnInit() { }

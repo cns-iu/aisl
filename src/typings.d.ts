@@ -4,9 +4,14 @@ interface NodeModule {
   id: string;
 }
 
+declare module 'worker-loader!*' {
+  const content: any;
+  export = content;
+}
+
 declare module '*.json' {
-    const value: any;
-    export default value;
+  const value: any;
+  export default value;
 }
 
 // FIXME: casual-browserify needs to be updated to change the line below on their repo.

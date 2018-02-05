@@ -1,57 +1,29 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AislMavDataMassagerService } from '../shared/aisl-mav-data-massager.service';
-import { Field } from '../../mav/shared/field';
+import { Observable } from 'rxjs/Observable';
+
+import { ScatterPlotDataService } from '../shared/scatterplot-data.service';
+import { IField, Field, Changes } from '../../dino-core';
+
 @Component({
   selector: 'aisl-scatterplot',
   templateUrl: './scatterplot.component.html',
   styleUrls: ['./scatterplot.component.sass'],
-  providers: [ AislMavDataMassagerService ]
+  providers: [ScatterPlotDataService]
 })
 export class ScatterplotComponent implements OnInit {
+  xFields: IField<any>[];
+  yFields: IField<any>[];
+  dataStream: Observable<Changes<any>>;
 
-  newData: [number, number][] = [];
-  xAttributeSelected: Field;
-  yAttributeSelected: Field;
-
-  constructor(public massager: AislMavDataMassagerService ) { }
-
-  /*** This function gets data from massager service based on fields selected ***/
-    fetchData() {
-      if ((this.xAttributeSelected == null) || (this.yAttributeSelected == null)) {
-        return; }
-      const xAttrName = this.xAttributeSelected.property;
-      const yAttrName = this.yAttributeSelected.property;
-      const xAttrType = this.xAttributeSelected.type;
-      const yAttrType = this.yAttributeSelected.type;
-
-      this.massager.raceCompleted.subscribe(
-        (msg) => {
-          const runData = msg.toArray();
-          runData[0].results.forEach((d) => {
-            const data = {'persona': d.persona, 'avatar': runData[0].avatar, 'run': d};
-            // this.newData.push([Math.random()*((15 - 1) + 1), data[yAttrType][yAttrName]/1000]);
-            this.newData.push([Math.random() * 4, data[yAttrType][yAttrName] / 1000]);
-            console.log('newData from aisl-mav', this.newData);
-          });
-          this.newData = this.newData.concat();
-        }
-      );
-    }
-
-  ngOnInit() {
-
-  // this.fetchData();
+  xField: IField<any>;
+  yField: IField<any>;
+  constructor(public massager: ScatterPlotDataService) {
+    this.xFields = massager.xFields;
+    this.yFields = massager.yFields;
+    this.xField = massager.xFields[0];
+    this.yField = massager.yFields[1];
+    this.dataStream = massager.dataStream;
   }
 
-  setXAttribute(xAttr) {
-    console.log(xAttr);
-    this.xAttributeSelected = xAttr;
-    this.fetchData();
-  }
-
-  setYAttribute(yAttr) {
-      console.log(yAttr);
-      this.yAttributeSelected = yAttr;
-      this.fetchData();
-    }
+  ngOnInit() { }
 }
