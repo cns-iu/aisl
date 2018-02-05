@@ -1,61 +1,86 @@
 import { Injectable } from '@angular/core';
-import { List } from 'immutable';
-import { MessageService } from '../../aisl-backend/shared/message.service';
-import { RaceCompletedMessage } from '../../aisl-backend/shared/aisl-messages';
-import { IField, Field, Changes } from '../../dino-core';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/scan';
 
-const gender2color = {
+import { List } from 'immutable';
+
+import { IField, Field, Changes } from '../../dino-core';
+
+import { MessageService, RaceCompletedMessage } from '../../aisl-backend';
+
+// Gender to color mapping
+const genderToColorMap = {
   'male': 'blue',
   'female': 'pink',
   'other': 'purple'
 };
-const fields: IField<any>[] = [
+
+// Default fields
+const defaultStateFields = [
   new Field<string>('state', 'State', (item: any): string => {
     return item.persona.state;
-  }),
+  })
+];
+
+const defaultStateColorFields = [
   new Field<string>('color', 'Runner\'s Color', (item: any): string => {
     return item.persona.color;
   }),
   new Field<string>('gender', 'Runner\'s Gender', (item: any): string => {
     return item.persona.gender;
   }, (value: any): string => {
-    return gender2color[value] || gender2color['other'];
+    return genderToColorMap[value] || genderToColorMap['other'];
   })
 ];
 
+// Constants
+const maxConcurrentResults = 1;
+
+// Helper functions
+function getStates(messages: RaceCompletedMessage[]): any {
+  const results = messages.map((message) => message.results);
+  return results.reduce((acc, current) => acc.concat(current), []);
+}
+
+function accumulateMessages(acc: List<RaceCompletedMessage>,
+    current: RaceCompletedMessage): List<RaceCompletedMessage> {
+  const maxSize = maxConcurrentResults + 1;
+  const size = acc.size;
+
+  return (size === maxSize ? acc.shift() : acc).push(current);
+}
+
+function messagesToChanges(messages: List<RaceCompletedMessage>): Changes {
+  const maxSize = maxConcurrentResults + 1;
+  const size = messages.size;
+
+  if (size !== maxSize || size <= maxConcurrentResults) {
+    return new Changes(getStates(messages.toJS()));
+  } else {
+    const added = [messages.last()];
+    const removed = [messages.first()];
+
+    return new Changes(getStates(added), getStates(removed));
+  }
+}
+
 @Injectable()
 export class GeomapDataService {
-  stateFields: IField<any>[];
-  stateColorFields: IField<any>[];
-  fields = fields;
-  stateDataStream: Observable<Changes<any>>;
-  pointDataStream: Observable<Changes<any>>;
+  readonly stateDataStream: Observable<Changes>;
+  stateFields: IField<any>[] = defaultStateFields;
+  stateColorFields: IField<any>[] = defaultStateColorFields;
+
+  readonly pointDataStream: Observable<Changes>;
+
+  fields: IField<any>[];
 
   constructor(private messageService: MessageService) {
-    this.stateFields = fields.slice(0, 1);
-    this.stateColorFields = fields.slice(1, 3);
-    this.stateDataStream = <Observable<Changes<any>>>messageService
-      .asBoundedList(5, RaceCompletedMessage).map((messages) => {
-        return new Changes(messages.reduce((result, message) => {
-          const raceMessage = <RaceCompletedMessage>message;
-          raceMessage.results.forEach((race) => {
-            race['avatar'] = raceMessage.avatar;
-            result.push(race);
-          });
-          return result;
-        }, []).slice(0, 5));
-      });
-    this.pointDataStream = <Observable<Changes<any>>>messageService
-      .asBoundedList(5, RaceCompletedMessage).map((messages) => {
-        return new Changes(messages.reduce((result, message) => {
-          const raceMessage = <RaceCompletedMessage>message;
-          raceMessage.results.forEach((race) => {
-            race['avatar'] = raceMessage.avatar;
-            result.push(race);
-          });
-          return result;
-        }, []).slice(0, 5));
-      });
+    this.fields = [].concat(
+      this.stateFields, this.stateColorFields
+    );
+
+    this.stateDataStream = this.pointDataStream = messageService.asObservable().filter((message) => {
+      return message instanceof RaceCompletedMessage;
+    }).scan(accumulateMessages, List<RaceCompletedMessage>()).map(messagesToChanges);
   }
 }

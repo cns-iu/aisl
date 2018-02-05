@@ -9,10 +9,11 @@ import { Changes, IField } from '../../dino-core';
   styleUrls: ['./geomap.component.sass']
 })
 export class GeomapComponent implements OnInit {
-
   @Input() stateDataStream: Observable<Changes>;
   @Input() stateField: IField<string>;
   @Input() stateColorField: IField<string>;
+  @Input() stateFields: IField<any>[];
+  @Input() stateColorFields: IField<any>[];
 
   @Input() pointDataStream: Observable<Changes>;
   @Input() pointLatitudeField: IField<number>;
