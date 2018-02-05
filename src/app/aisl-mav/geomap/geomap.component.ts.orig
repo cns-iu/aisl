@@ -1,20 +1,28 @@
-import { Component, Input, OnInit } from '@angular/core';
+<<<<<<< HEAD
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/scan';
 
 import { List } from 'immutable';
 
-import { IField, Changes } from '../../dino-core';
+import { MessageService, RaceCompletedMessage } from '../../aisl-backend';
+import { Changes } from '../../dino-core';
 
-import { GeomapDataService } from '../shared/geomap-data.service';
-
-/*function getStates(messages: RaceCompletedMessage[]): any {
+function getStates(messages: RaceCompletedMessage[]): any {
   const states = messages.reduce((result, message) => {
     message.results.forEach((r) => result.push(r.persona.state));
     return result;
   }, []);
 
   return states.map((state) => ({state, color: '#0000ff'}));
-}*/
+}
+=======
+import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
+import { GeomapDataService } from '../shared/geomap-data.service';
+import { IField, Field, Changes } from '../../dino-core';
+>>>>>>> refs/remotes/origin/master
 
 @Component({
   selector: 'aisl-geomap',
@@ -23,19 +31,20 @@ import { GeomapDataService } from '../shared/geomap-data.service';
   providers: [GeomapDataService]
 })
 export class GeomapComponent implements OnInit {
-  private stateDataStream: Observable<Changes>;
-
+  stateFields: IField<any>[];
+  stateColorFields: IField<any>[];
+  fields: IField<any>[];
+  stateDataStream: Observable<Changes<any>>;
+  pointDataStream: Observable<Changes<any>>;
   stateField: IField<any>;
   stateColorField: IField<any>;
 
-  stateFields: IField<any>[];
-  stateColorFields: IField<any>[];
+<<<<<<< HEAD
+  private stateStream: Observable<Changes>;
 
-  pointDataStream: Observable<Changes>;
-
-  /*constructor(messageService: MessageService) {
+  constructor(messageService: MessageService) {
     const maxConcurrentResults = 1;
-    this.stateDataStream = messageService.asObservable().filter((message) => {
+    this.stateStream = messageService.asObservable().filter((message) => {
       return message instanceof RaceCompletedMessage;
     }).scan((acc: List<RaceCompletedMessage>, current: RaceCompletedMessage) => {
       if (acc.size === maxConcurrentResults + 1) {
@@ -54,19 +63,21 @@ export class GeomapComponent implements OnInit {
       }
 
       return new Changes(getStates(added), getStates(removed));
-    });*/
-  constructor(public massager: GeomapDataService) {
-    this.stateDataStream = massager.stateDataStream;
-
-    this.stateField = massager.stateFields[0];
-    this.stateColorField = massager.stateColorFields[1];
-
-    this.stateFields = massager.stateFields;
-    this.stateColorFields = massager.stateColorFields;
-
-    this.pointDataStream = massager.pointDataStream;
+    });
   }
 
   ngOnInit() {
+=======
+  constructor(public massager: GeomapDataService) {
+    this.stateFields = massager.stateFields;
+    this.stateColorFields = massager.stateColorFields;
+    this.stateField = this.stateFields[0];
+    this.stateColorField = this.stateColorFields[1];
+    this.stateDataStream = massager.stateDataStream;
+    this.pointDataStream = massager.pointDataStream;
+>>>>>>> refs/remotes/origin/master
   }
+
+  ngOnInit() { }
+
 }
