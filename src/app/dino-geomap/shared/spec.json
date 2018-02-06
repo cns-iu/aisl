@@ -100,9 +100,6 @@
       },
       "encode": {
         "enter": {
-          "size": {
-            "value": 16
-          },
           "fill": {
             "value": "steelblue"
           },
@@ -110,10 +107,10 @@
             "value": 0.8
           },
           "stroke": {
-            "value": "white"
+            "value": "red"
           },
           "strokeWidth": {
-            "value": 1.5
+            "value": 1
           }
         },
         "update": {
@@ -122,6 +119,9 @@
           },
           "y": {
             "field": "y"
+          },
+          "r": {
+            "field": "radius"
           }
         }
       }
