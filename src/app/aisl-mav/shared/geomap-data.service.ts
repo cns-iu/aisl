@@ -58,6 +58,12 @@ const defaultPointPositionFields = [
   })
 ];
 
+const defaultPointRadiusFields = [
+  new Field<number>('radius', 'Point Radius', (item: any): number => {
+    return 32;
+  })
+];
+
 // Constants
 const maxConcurrentResults = 2;
 
@@ -99,10 +105,11 @@ export class GeomapDataService {
 
   readonly pointDataStream: Observable<Changes>;
   readonly pointPositionFields: IField<[Number, Number]>[] = defaultPointPositionFields;
+  readonly pointRadiusFields: IField<number>[] = defaultPointRadiusFields;
 
   readonly fields: IField<any>[] = [].concat(
     defaultStateFields, commonFields, defaultStateColorFields,
-    defaultPointPositionFields
+    defaultPointPositionFields, defaultPointRadiusFields
   );
 
   constructor(private messageService: MessageService) {

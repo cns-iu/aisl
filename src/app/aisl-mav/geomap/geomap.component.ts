@@ -25,8 +25,10 @@ export class GeomapComponent implements OnInit {
   private pointDataStream: Observable<Changes>;
 
   pointPositionField: IField<any>;
+  pointRadiusField: IField<any>;
 
   pointPositionFields: IField<any>[];
+  pointRadiusFields: IField<any>[];
 
   constructor(public massager: GeomapDataService) {
     this.stateDataStream = massager.stateDataStream;
@@ -40,8 +42,10 @@ export class GeomapComponent implements OnInit {
     this.pointDataStream = massager.pointDataStream;
 
     this.pointPositionField = massager.pointPositionFields[0];
+    this.pointRadiusField = massager.pointRadiusFields[0];
 
     this.pointPositionFields = massager.pointPositionFields;
+    this.pointRadiusFields = massager.pointRadiusFields;
   }
 
   ngOnInit() {

@@ -18,6 +18,8 @@ const defaultPointLatLongField = new Field<[number, number]>(
     return [latitude, longitude];
   }
 );
+const defaultPointRadiusField = new Field<number>('radius', 'Point Radius');
+const defaultPointColorField = new Field<string>('color', 'Point Color');
 
 // Computed fields
 const computedStateIdField = new Field<number>(
@@ -86,9 +88,13 @@ export class GeomapDataService {
   initializePoints(
     stream: Observable<Changes> = Observable.of(),
     pointLatLongField: IField<[number, number]> = defaultPointLatLongField,
+    pointRadiusField: IField<number> = defaultPointRadiusField,
+    pointColorField: IField<string> = defaultPointColorField
   ): this {
     this.pointProcessor = new FieldProcessor<Point>(stream, {
-      lat_long: pointLatLongField
+      lat_long: pointLatLongField,
+      radius: pointRadiusField,
+      // color: pointColorField
     }, {
       id: computedPointIdField,
       latitude: computedPointLatitudeField,
