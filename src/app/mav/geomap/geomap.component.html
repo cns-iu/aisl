@@ -1,7 +1,8 @@
-<dino-geomap [stateField]="stateField"
+<dino-geomap [stateDataStream]="stateDataStream"
+             [stateField]="stateField"
              [stateColorField]="stateColorField"
-             [stateDataStream]="stateDataStream"
-             [pointDataStream]="pointDataStream">
+             [pointDataStream]="pointDataStream"
+             [pointLatLongField]="pointPositionField">
 </dino-geomap>
 
 <mav-field-dropzones>
@@ -12,5 +13,9 @@
   <mav-field-dropzone label="State Color Field"
                       [fields]="stateColorFields"
                       [(field)]="stateColorField">
+  </mav-field-dropzone>
+  <mav-field-dropzone label="Point Position Field"
+                      [fields]="pointPositionFields"
+                      [(field)]="pointPositionField">
   </mav-field-dropzone>
 </mav-field-dropzones>

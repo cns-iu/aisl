@@ -11,8 +11,13 @@ import { lookupStateCode } from './state-lookup';
 const defaultStateField = new Field<string>('state', 'State');
 const defaultStateColorField = new Field<string>('color', 'State Coloring');
 
-const defaultPointLatitudeField = new Field<number>('latitude', 'Latitude');
-const defaultPointLongitudeField = new Field<number>('longitude', 'Longitude');
+const defaultPointLatLongField = new Field<[number, number]>(
+  'lat_long', 'Latitude,Longitude',
+  (data: any): [number, number] => {
+    const {latitude = 0, longitude = 0} = data;
+    return [latitude, longitude];
+  }
+);
 
 // Computed fields
 const computedStateIdField = new Field<number>(
@@ -30,6 +35,20 @@ const computedPointIdField = new Field<string>(
     } else {
       return '' + data.latitude + '+' + data.longitude;
     }
+  }
+);
+
+const computedPointLatitudeField = new Field<number>(
+  'latitude', 'Computed Point Latitude',
+  (data: Partial<Point>): number => {
+    return data.lat_long[0];
+  }
+);
+
+const computedPointLongitudeField = new Field<number>(
+  'longitude', 'Computed Point Longitude',
+  (data: Partial<Point>): number => {
+    return data.lat_long[1];
   }
 );
 
@@ -66,14 +85,14 @@ export class GeomapDataService {
 
   initializePoints(
     stream: Observable<Changes> = Observable.of(),
-    pointLatitudeField: IField<number> = defaultPointLatitudeField,
-    pointLongitudeField: IField<number> = defaultPointLongitudeField
+    pointLatLongField: IField<[number, number]> = defaultPointLatLongField,
   ): this {
     this.pointProcessor = new FieldProcessor<Point>(stream, {
-      latitude: pointLatitudeField,
-      longitude: pointLongitudeField
+      lat_long: pointLatLongField
     }, {
-      id: computedPointIdField
+      id: computedPointIdField,
+      latitude: computedPointLatitudeField,
+      longitude: computedPointLongitudeField
     });
 
     this.pointProcessor.asObservable().subscribe((change) => {

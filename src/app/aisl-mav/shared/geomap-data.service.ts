@@ -15,14 +15,8 @@ const genderToColorMap = {
   'other': 'purple'
 };
 
-// Default fields
-const defaultStateFields = [
-  new Field<string>('state', 'State', (item: any): string => {
-    return item.persona.state;
-  })
-];
-
-const defaultStateColorFields = [
+// Common fields
+const commonFields = [
   new Field<string>('color', 'Runner\'s Color', (item: any): string => {
     return item.persona.color;
   }),
@@ -33,8 +27,39 @@ const defaultStateColorFields = [
   })
 ];
 
+// Default fields
+const defaultStateFields = [
+  new Field<string>('state', 'State', (item: any): string => {
+    return item.persona.state;
+  })
+];
+
+const defaultStateColorFields = [
+  new Field<string>('falseStart', 'False Start', (item: any): string => {
+    return item.falseStart ? 'red' : 'green';
+  }),
+  new Field<string>('lane', 'Lane', (item: any): string => {
+    switch (item.lane) {
+      case 1:
+        return 'crimson';
+
+      case 2:
+        return 'turquoise';
+
+      default:
+        return 'yellow';
+    }
+  })
+];
+
+const defaultPointPositionFields = [
+  new Field<[number, number]>('position', 'Point Position', (item: any): [number, number] => {
+    return [item.persona.latitude, item.persona.longitude];
+  })
+];
+
 // Constants
-const maxConcurrentResults = 1;
+const maxConcurrentResults = 2;
 
 // Helper functions
 function getStates(messages: RaceCompletedMessage[]): any {
@@ -67,18 +92,20 @@ function messagesToChanges(messages: List<RaceCompletedMessage>): Changes {
 @Injectable()
 export class GeomapDataService {
   readonly stateDataStream: Observable<Changes>;
-  stateFields: IField<any>[] = defaultStateFields;
-  stateColorFields: IField<any>[] = defaultStateColorFields;
+  readonly stateFields: IField<string>[] = defaultStateFields;
+  readonly stateColorFields: IField<string>[] = [].concat(
+    commonFields, defaultStateColorFields
+  );
 
   readonly pointDataStream: Observable<Changes>;
+  readonly pointPositionFields: IField<[Number, Number]>[] = defaultPointPositionFields;
 
-  fields: IField<any>[];
+  readonly fields: IField<any>[] = [].concat(
+    defaultStateFields, commonFields, defaultStateColorFields,
+    defaultPointPositionFields
+  );
 
   constructor(private messageService: MessageService) {
-    this.fields = [].concat(
-      this.stateFields, this.stateColorFields
-    );
-
     this.stateDataStream = this.pointDataStream = messageService.asObservable().filter((message) => {
       return message instanceof RaceCompletedMessage;
     }).scan(accumulateMessages, List<RaceCompletedMessage>()).map(messagesToChanges);

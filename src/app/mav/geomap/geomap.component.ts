@@ -16,8 +16,8 @@ export class GeomapComponent implements OnInit {
   @Input() stateColorFields: IField<any>[];
 
   @Input() pointDataStream: Observable<Changes>;
-  @Input() pointLatitudeField: IField<number>;
-  @Input() pointLongitudeField: IField<number>;
+  @Input() pointPositionField: IField<[number, number]>;
+  @Input() pointPositionFields: IField<[number, number]>[];
 
   constructor() { }
 

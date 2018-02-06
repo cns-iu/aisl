@@ -22,7 +22,11 @@ export class GeomapComponent implements OnInit {
   stateFields: IField<any>[];
   stateColorFields: IField<any>[];
 
-  pointDataStream: Observable<Changes>;
+  private pointDataStream: Observable<Changes>;
+
+  pointPositionField: IField<any>;
+
+  pointPositionFields: IField<any>[];
 
   constructor(public massager: GeomapDataService) {
     this.stateDataStream = massager.stateDataStream;
@@ -34,6 +38,10 @@ export class GeomapComponent implements OnInit {
     this.stateColorFields = massager.stateColorFields;
 
     this.pointDataStream = massager.pointDataStream;
+
+    this.pointPositionField = massager.pointPositionFields[0];
+
+    this.pointPositionFields = massager.pointPositionFields;
   }
 
   ngOnInit() {
