@@ -3,6 +3,6 @@ export interface Point {
   lat_long: [number, number];
   latitude: number;
   longitude: number;
-  radius: number;
+  size: number;
   color: string;
 }
