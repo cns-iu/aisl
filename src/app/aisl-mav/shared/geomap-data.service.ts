@@ -64,6 +64,11 @@ const defaultPointRadiusFields = [
   })
 ];
 
+const defaultPointColorFields = [].concat(
+  commonFields,
+  defaultStateColorFields
+);
+
 // Constants
 const maxConcurrentResults = 2;
 
@@ -106,6 +111,7 @@ export class GeomapDataService {
   readonly pointDataStream: Observable<Changes>;
   readonly pointPositionFields: IField<[Number, Number]>[] = defaultPointPositionFields;
   readonly pointRadiusFields: IField<number>[] = defaultPointRadiusFields;
+  readonly pointColorFields: IField<string>[] = defaultPointColorFields;
 
   readonly fields: IField<any>[] = [].concat(
     defaultStateFields, commonFields, defaultStateColorFields,

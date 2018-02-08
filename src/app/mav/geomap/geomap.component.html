@@ -3,7 +3,8 @@
              [stateColorField]="stateColorField"
              [pointDataStream]="pointDataStream"
              [pointLatLongField]="pointPositionField"
-             [pointRadiusField]="pointRadiusField">
+             [pointRadiusField]="pointRadiusField"
+             [pointColorField]="pointColorField">
 </dino-geomap>
 
 <mav-field-dropzones>
@@ -22,5 +23,9 @@
   <mav-field-dropzone label="Point Radius Field"
                       [fields]="pointRadiusFields"
                       [(field)]="pointRadiusField">
+  </mav-field-dropzone>
+  <mav-field-dropzone label="Point Color Field"
+                      [fields]="pointColorFields"
+                      [(field)]="pointColorField">
   </mav-field-dropzone>
 </mav-field-dropzones>

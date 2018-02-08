@@ -94,7 +94,7 @@ export class GeomapDataService {
     this.pointProcessor = new FieldProcessor<Point>(stream, {
       lat_long: pointLatLongField,
       radius: pointRadiusField,
-      // color: pointColorField
+      color: pointColorField
     }, {
       id: computedPointIdField,
       latitude: computedPointLatitudeField,

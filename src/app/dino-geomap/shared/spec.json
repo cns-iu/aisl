@@ -100,18 +100,6 @@
       },
       "encode": {
         "enter": {
-          "fill": {
-            "value": "steelblue"
-          },
-          "fillOpacity": {
-            "value": 0.8
-          },
-          "stroke": {
-            "value": "red"
-          },
-          "strokeWidth": {
-            "value": 1
-          }
         },
         "update": {
           "x": {
@@ -122,6 +110,9 @@
           },
           "r": {
             "field": "radius"
+          },
+          "fill": {
+            "field": "color"
           }
         }
       }
