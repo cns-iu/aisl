@@ -58,9 +58,26 @@ const defaultPointPositionFields = [
   })
 ];
 
-const defaultPointRadiusFields = [
-  new Field<number>('radius', 'Point Radius', (item: any): number => {
-    return 32;
+const defaultPointSizeFields = [
+  new Field<number>('size', 'Point Fixed Size', (item: any): number => {
+    const radius = 5;
+    return radius * radius * Math.PI;
+  }),
+  new Field<number>('timeMillis', 'Point Run Time Size', (item: any): number => {
+    const minRadius = 5;
+    const maxRadius = 15;
+    const minArea = minRadius * minRadius * Math.PI;
+    const maxArea = maxRadius * maxRadius * Math.PI;
+    const areaDiff = maxArea - minArea;
+
+    const minTime = 2000;
+    const maxTime = 10000;
+    const timeDiff = maxTime - minTime;
+    const timeMillis = Math.min(Math.max(item.timeMillis, minTime), maxTime);
+    const timeFactor = (timeMillis - minTime) / timeDiff;
+
+    const area = minArea + areaDiff * timeFactor;
+    return area;
   })
 ];
 
@@ -110,12 +127,12 @@ export class GeomapDataService {
 
   readonly pointDataStream: Observable<Changes>;
   readonly pointPositionFields: IField<[Number, Number]>[] = defaultPointPositionFields;
-  readonly pointRadiusFields: IField<number>[] = defaultPointRadiusFields;
+  readonly pointSizeFields: IField<number>[] = defaultPointSizeFields;
   readonly pointColorFields: IField<string>[] = defaultPointColorFields;
 
   readonly fields: IField<any>[] = [].concat(
     defaultStateFields, commonFields, defaultStateColorFields,
-    defaultPointPositionFields, defaultPointRadiusFields
+    defaultPointPositionFields, defaultPointSizeFields
   );
 
   constructor(private messageService: MessageService) {

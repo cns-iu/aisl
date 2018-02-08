@@ -25,11 +25,11 @@ export class GeomapComponent implements OnInit {
   private pointDataStream: Observable<Changes>;
 
   pointPositionField: IField<any>;
-  pointRadiusField: IField<any>;
+  pointSizeField: IField<any>;
   pointColorField: IField<any>;
 
   pointPositionFields: IField<any>[];
-  pointRadiusFields: IField<any>[];
+  pointSizeFields: IField<any>[];
   pointColorFields: IField<any>[];
 
   constructor(public massager: GeomapDataService) {
@@ -44,11 +44,11 @@ export class GeomapComponent implements OnInit {
     this.pointDataStream = massager.pointDataStream;
 
     this.pointPositionField = massager.pointPositionFields[0];
-    this.pointRadiusField = massager.pointRadiusFields[0];
+    this.pointSizeField = massager.pointSizeFields[0];
     this.pointColorField = massager.pointColorFields[0];
 
     this.pointPositionFields = massager.pointPositionFields;
-    this.pointRadiusFields = massager.pointRadiusFields;
+    this.pointSizeFields = massager.pointSizeFields;
     this.pointColorFields = massager.pointColorFields;
   }
 

@@ -108,8 +108,8 @@
           "y": {
             "field": "y"
           },
-          "r": {
-            "field": "radius"
+          "size": {
+            "field": "size"
           },
           "fill": {
             "field": "color"

@@ -17,10 +17,10 @@ export class GeomapComponent implements OnInit {
 
   @Input() pointDataStream: Observable<Changes>;
   @Input() pointPositionField: IField<[number, number]>;
-  @Input() pointRadiusField: IField<number>;
+  @Input() pointSizeField: IField<number>;
   @Input() pointColorField: IField<string>;
   @Input() pointPositionFields: IField<[number, number]>[];
-  @Input() pointRadiusFields: IField<number>[];
+  @Input() pointSizeFields: IField<number>[];
   @Input() pointColorFields: IField<string>[];
 
   constructor() { }
